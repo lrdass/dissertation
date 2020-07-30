@@ -27,7 +27,7 @@
 	\OnehalfSpacing
 	\centering
 	\imprimirautor\\%
-	\vspace*{10pt}		
+	\vspace*{10pt}
 	\textbf{\imprimirtitulo}%
 	\ifnotempty{\imprimirsubtitulo}{:~\imprimirsubtitulo}\\%
 	%		\vspace*{31.5pt}%3\baselineskip
@@ -69,8 +69,8 @@
 \begin{dedicatoria}
 	\vspace*{\fill}
 	\noindent
-	\begin{adjustwidth*}{}{5.5cm} 
-		\raggedleft       
+	\begin{adjustwidth*}{}{5.5cm}
+		\raggedleft
 		Este trabalho é dedicado aos meus colegas de classe e aos meus queridos pais.
 	\end{adjustwidth*}
 \end{dedicatoria}
@@ -80,9 +80,9 @@
 % Agradecimentos
 % ---
 \begin{agradecimentos}
-	Inserir os agradecimentos aos colaboradores à execução do trabalho. 
-	
-	Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx. 
+	Inserir os agradecimentos aos colaboradores à execução do trabalho.
+
+	Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.
 \end{agradecimentos}
 % ---
 
@@ -110,18 +110,22 @@
 \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
 \begin{resumo}
 	\SingleSpacing
-	No resumo são ressaltados o objetivo da pesquisa, o método utilizado, as discussões e os resultados com destaque apenas para os pontos principais. O resumo deve ser significativo, composto de uma sequência de frases concisas, afirmativas, e não de uma enumeração de tópicos. Não deve conter citações. Deve usar o verbo na voz ativa e na terceira pessoa do singular. O texto do resumo deve ser digitado, em um único bloco, sem espaço de parágrafo. O espaçamento entre linhas é simples e o tamanho da fonte é 12. Abaixo do resumo, informar as palavras-chave (palavras ou expressões significativas retiradas do texto) ou, termos retirados de thesaurus da área. Deve conter de 150 a 500 palavras. O resumo é elaborado de acordo com a NBR 6028.
-	
-	\textbf{Palavras-chave}: Palavra-chave 1. Palavra-chave 2. Palavra-chave 3.
+	Um estudo das estruturas e técnicas comuns para otimização para renderização em janelas.
+	Tendo em mente o constante crescimento de polígonos dos objetos a serem renderizados, há uma necessidade de que os
+	objetos sejam acessados e "encontrados" de forma rápida e eficiente.
+
+	\textbf{Palavras-chave}: Estruturas de Dados. Arvores. Geometria Computacional.
 \end{resumo}
 
 % resumo em inglês
 \begin{resumo}[Abstract]
 	\SingleSpacing
 	\begin{otherlanguage*}{english}
-		Resumo traduzido para outros idiomas, neste caso, inglês. Segue o formato do resumo feito na língua vernácula. As palavras-chave traduzidas, versão em língua estrangeira, são colocadas abaixo do texto precedidas pela expressão “Keywords”, separadas por ponto.
-		
-		\textbf{Keywords}: Keyword 1. Keyword 2. Keyword 3.
+		A study of the most common tecniques for optimizing rendering on windows.
+		Beign awere of the constant growth of the polygon count and the size of graphical applications, and the necessity for easy
+		and quick access to the objects.
+
+		\textbf{Keywords}: Data Structure. Tree. Computational Geometry.
 	\end{otherlanguage*}
 \end{resumo}
 
@@ -145,49 +149,49 @@
 %% ---
 
 {%hidelinks
-	\hypersetup{hidelinks}
-	% ---
-	% inserir lista de ilustrações
-	% ---
-	\pdfbookmark[0]{\listfigurename}{lof}
-	\listoffigures*
-	\cleardoublepage
-	% ---
-	
-	% ---
-	% inserir lista de quadros
-	% ---
-	\pdfbookmark[0]{\listofquadrosname}{loq}
-	\listofquadros*
-	\cleardoublepage
-	% ---
-	
-	% ---
-	% inserir lista de tabelas
-	% ---
-	\pdfbookmark[0]{\listtablename}{lot}
-	\listoftables*
-	\cleardoublepage
-	% ---
-	
-	% ---
-	% inserir lista de abreviaturas e siglas (devem ser declarados no preambulo)
-	% ---
-	\imprimirlistadesiglas
-	% ---
-	
-	% ---
-	% inserir lista de símbolos (devem ser declarados no preambulo)
-	% ---
-	\imprimirlistadesimbolos
-	% ---
-	
-	% ---
-	% inserir o sumario
-	% ---
-	\pdfbookmark[0]{\contentsname}{toc}
-	\tableofcontents*
-	\cleardoublepage
-	
+\hypersetup{hidelinks}
+% ---
+% inserir lista de ilustrações
+% ---
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
+% ---
+
+% ---
+% inserir lista de quadros
+% ---
+\pdfbookmark[0]{\listofquadrosname}{loq}
+\listofquadros*
+\cleardoublepage
+% ---
+
+% ---
+% inserir lista de tabelas
+% ---
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
+% ---
+
+% ---
+% inserir lista de abreviaturas e siglas (devem ser declarados no preambulo)
+% ---
+\imprimirlistadesiglas
+% ---
+
+% ---
+% inserir lista de símbolos (devem ser declarados no preambulo)
+% ---
+\imprimirlistadesimbolos
+% ---
+
+% ---
+% inserir o sumario
+% ---
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
 }%hidelinks
 % ---

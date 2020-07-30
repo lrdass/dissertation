@@ -75,40 +75,40 @@
 % Informações de dados para CAPA e FOLHA DE ROSTO
 % ---
 % FIXME Substituir 'Nome completo do autor' pelo seu nome.
-\autor{Nome completo do autor(a)}
+\autor{Lucas Rodrigo da Silva Suppes}
 % FIXME Substituir 'Título do trabalho' pelo título da trabalho.
-\titulo{Título do trabalho}
+\titulo{Algorítmos e Estruturas de dados para visualização de polígonos}
 % FIXME Substituir 'Subtítulo (se houver)' pelo subtítulo da trabalho.  
 % Caso não tenha substítulo, comente a linha a seguir.
-\subtitulo{subtítulo (se houver)}
+% \subtitulo{}
 % FIXME Substituir 'XXXXXX' pelo nome do seu
 % orientador.
-\orientador{Prof. XXXXXX, Dr.}
+\orientador{Prof. Álvaro Junio Pereira Franco , Dr.}
 % FIXME Se for orientado por uma mulher, comente a linha acima e descomente a linha a seguir.
 % \orientador[Orientadora]{Nome da orientadora, Dra.}
 % FIXME Substituir 'XXXXXX' pelo nome do seu
 % coorientador. Caso não tenha coorientador, comente a linha a seguir.
-\coorientador{Prof. XXXXXX, Dr.}
+% \coorientador{Prof. XXXXXX, Dr.}
 % FIXME Se for coorientado por uma mulher, comente a linha acima e descomente a linha a seguir.
 % \coorientador[Coorientadora]{XXXXXX, Dra.}
 % FIXME Substituir '[ano]' pelo ano (ano) em que seu trabalho foi defendido.
-\ano{ano}
+\ano{2020}
 % FIXME Substituir '[dia] de [mês] de [ano]' pela data em que ocorreu sua defesa.
 %\data{[dia] de [mês] de [ano]}
 % FIXME Substituir 'Local' pela cidade em que ocorreu sua defesa.
-\local{Local}
+\local{Florianópolis}
 \instituicaosigla{UFSC}
 \instituicao{Universidade Federal de Santa Catarina}
 % FIXME Substituir 'Dissertação/Tese' pelo tipo de trabalho (Tese, Dissertação). 
-\tipotrabalho{Dissertação/Tese}
+\tipotrabalho{Tese}
 % FIXME Substituir '[mestre/doutor] em XXXXXX' pela grau adequado.
-\formacao{[mestre/doutor] em [nome do título obtido pelo Programa]}
+\formacao{Bacharel em Ciencias da Computação}
 % FIXME Substituir '[mestrado/doutorado]' pelo nivel adequado.
-\nivel{[mestrado/doutorado]}
+\nivel{Bacharelado}
 % FIXME Substituir 'Programa de Pós-Graduação em XXXXXX' pela curso adequado.
-\programa{Programa de Pós-Graduação em XXXXXX}
+\programa{Programa de Pós-Graduação em Ciências da Computação}
 % FIXME Substituir 'Campus XXXXXX ou Centro de XXXXXX' pelo campus ou centro adequado.
-\centro{Campus XXXXXX ou Centro de XXXXXX}
+\centro{Centro de Tecnologia}
 \preambulo
 {%
 \imprimirtipotrabalho~submetida~ao~\imprimirprograma~da~\imprimirinstituicao~para~a~obtenção~do~título~de~\imprimirformacao.
@@ -144,7 +144,9 @@
 % ---
 
 % Declaração das siglas
-\siglalista{ABNT}{Associação Brasileira de Normas Técnicas}
+\siglalista{RAM}{Memória de Acesso Aleatório}
+\siglalista{V-RAM}{Video RAM}
+\siglalista{VSD}{Visible-Surface Determination}
 
 % Declaração dos simbolos
 \simbololista{C}{\ensuremath{C}}{Circunferência de um círculo}
@@ -173,7 +175,7 @@
 \selectlanguage{brazil}
 
 % Retira espaço extra obsoleto entre as frases.
-\frenchspacing 
+\frenchspacing
 
 % Espaçamento 1.5 entre linhas
 \OnehalfSpacing
@@ -231,7 +233,7 @@
 % Referências bibliográficas
 % ----------------------------------------------------------
 \begingroup
-    \printbibliography[title=REFERÊNCIAS]
+\printbibliography[title=REFERÊNCIAS]
 \endgroup
 
 % ----------------------------------------------------------
@@ -250,7 +252,7 @@
 % Inicia os apêndices
 % ---
 \begin{apendicesenv}
-%	\partapendices* 
+	%	\partapendices* 
 	\input{aftertext/apendice_a}
 \end{apendicesenv}
 % ---
@@ -264,7 +266,7 @@
 % Inicia os anexos
 % ---
 \begin{anexosenv}
-%	\partanexos*
+	%	\partanexos*
 	\input{aftertext/anexo_a}
 \end{anexosenv}
 
