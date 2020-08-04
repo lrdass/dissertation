@@ -27,6 +27,28 @@ x, a subárvore a esquerda contem os pontos com o eixo x menor que o ponto de co
 \end{figure}
 
 \subsection{Construção da Árvore}
+A termos didáticos segue a construção da arvore KD de 2 dimensões.
+Seja \textit{P} o conjunto de \textit{n} pontos em um plano.
+
+Uma busca de alcance 2-dimensional em \textit{P} é uma busca de quais pontos da busca estão
+entre o retângulo de busca \([x,x'] X [y,y']\). Um ponto \textit{p}\(:= (p_x, p_y)\) está dentro do retângulo
+de busca se e somente se:
+
+\[
+    p_x \in [x, x']  \text{ e } [p_y \in [y,y']
+\].
+
+Podemos dizer que uma busca 2-dimensional é composta de duas sub-buscas 1-dimensional, uma no
+eixo \(x\)-coordenada de um dos pontos e um na \(y\)-coordenada.
+
+\begin{figure}[htb]
+    \caption{\label{fig:Fig_2}Busca em alcance \textit{dimensional} - 2D}
+    \begin{center}
+        \includegraphics{images/search_range.png}
+    \end{center}
+    \fonte{Computational Geometry}
+\end{figure}
+
 
 
 \subsection{Busca de pontos}
