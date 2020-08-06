@@ -35,7 +35,7 @@ entre o retângulo de busca \([x,x'] X [y,y']\). Um ponto \textit{p}\(:= (p_x, p
 de busca se e somente se:
 
 \[
-    p_x \in [x, x']  \text{ e } [p_y \in [y,y']
+    p_x \in [x, x']  \text{ e } p_y \in [y,y']
 \].
 
 Podemos dizer que uma busca 2-dimensional é composta de duas sub-buscas 1-dimensional, uma no
@@ -49,9 +49,63 @@ eixo \(x\)-coordenada de um dos pontos e um na \(y\)-coordenada.
     \fonte{Computational Geometry}
 \end{figure}
 
+Na construção de uma arvore para 2 dimensões, cada ponto tem uma \(x\)-coordenada e uma
+\(y\)-coordenada.
+Seguimos então escolhendo um eixo inicial e salvando o valor de corte deste eixo que divide
+os pontos deste eixo em dois conjuntos, e no próximo nível da arvore, alterna-se o eixo e repete-se
+o processo recursivamente.
 
 
-\subsection{Busca de pontos}
+\begin{figure}[htb]
+    \caption{\label{fig:Fig_3} Arvore 2D}
+    \begin{center}
+        \includegraphics{images/kd_tree1.png}
+    \end{center}
+\end{figure}
+
+Na raiz ordena-se todos os pontos e divide o conjunto de pontos \(P\) com uma linha vertical
+\(l\) que divide os pontos pelo eixo \(x\). Guarda-se o valor de \(x_v\) no nodo e alterna-se o
+eixo.
+Agora, recursivamente repete o processo para os dois subconjuntos de pontos:
+Ordena-se os pontos pelo eixo \(y\) e divide o conjunto e encontra-se a reta horizontal que
+subdivide os pontos e guarda no nodo do valor de corte \(y\).
+A condição de parada é até quando o conjunto de pontos restantes contiver apenas um ponto.
+Este sendo então o nodo folha.
+
+
+\begin{algorithm}
+    \caption{ConstroiArvoreKD($Pontos, profundidade$)}
+    \begin{algorithmic}
+        \IF{P contem apenas um ponto}
+        \RETURN $P$
+        \ELSE
+        \STATE{
+            \IF{$profundidade$ é par}
+            \STATE{
+                Divide P em dois subconjuntos com um linha vertical $l$ pela mediana da $x-coordenada$
+                dos pontos em P. Seja $P_1$ o conjunto dos pontos à esquerda de $l$ e seja
+                $P_2$ o conjunto de pontos à direita de $l$.
+            }
+            \ELSE
+            \STATE{
+                Divide P em dois subconjuntos com um linha horizontal $l$ pela mediana da $y-coordenada$
+                dos pontos em P. Seja $P_1$ o conjunto dos pontos acima de $l$ e seja
+                $P_2$ o conjunto de pontos à abaixo de $l$.
+            }
+            \ENDIF
+        }
+        \ENDIF
+
+        \STATE $v_{esquerda} \leftarrow $ ConstroiArvoreKD($P_1, profundidade+1$)
+        \STATE $v_{direita} \leftarrow $ ConstroiArvoreKD($P_2, profundidade+1$)
+        Cria um nodo $v$ guardando $l$ e fazendo $v_esquerda$ o nodo da esquerda
+        de $v$ e fazendo $v_direita$ nodo da direita de $v$.
+
+        \RETURN $v$
+    \end{algorithmic}
+\end{algorithm}
+
+
 \subsection{Busca com alcance}
 
 % ----------------------------------------------------------
