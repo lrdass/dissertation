@@ -105,8 +105,85 @@ Este sendo então o nodo folha.
     \end{algorithmic}
 \end{algorithm}
 
-
 \subsection{Busca com alcance}
+
+Agora retomamos para o algoritmo de busca. Podemos imaginar que os pontos na subárvore à esquerda
+da raiz, estão limitados à direita pela reta com o eixo \(x\) com valor de \(x \leq l_1\).
+Enquanto os pontos na subárvore à direita do nodo \(l_1\) estão limitados com o eixo \(x > l_1\).
+
+A exemplo: o nodo \(l_4\), a região correspondente de \(l_4\) é limitada à esquerda de
+\(l_1\) e abaixo de \(y\) do nodo \(l_2\).
+
+\begin{figure}[htb]
+    \caption{\label{fig:Fig_4} Área respectiva de um nodo}
+    \begin{center}
+        \includegraphics{images/kd_tree2.png}
+    \end{center}
+\end{figure}
+
+Denotaremos esta área de um nodo \(v\) como \(regiao(v)\). A região da raiz é simplesmente
+(no caso de uma arvore 2D) o plano inteiro.
+Portanto o algoritmo buscará a subárvore de \(v\) somente se o retângulo de busca intersectar
+a \(regiao(v)\).
+O algoritmo de busca funciona descendo a arvore mas visitando somente os nodos que a
+\(regiao(v)\) intersecta o retângulo da busca. Quando uma \(regiao(v)\) esta contido no
+retângulo de busca retornamos todos os pontos na subárvore.
+Quando chegarmos nos nodos folhas temos de checar se o nodo esta dentro da busca, se tiver,
+retorna-o.
+
+Segue o algoritmo que recebe como parâmetros a raiz da arvore-KD e o retângulo de busca \(R\).
+Usa-se uma chamada \(RetornaSubarvore(v)\) que atravessa a arvore de nodo \(v\) e retorna
+todos os pontos nas suas folhas. Segue como notação \(fe(v)\) sendo o filho da esquerda e
+\(fd(v)\) o filho da direita do nodo \(v\).
+
+
+\begin{algorithm}
+    \caption{BuscaEmArvoreKD($v, Busca$)}
+    \begin{algorithmic}
+        \IF{v é folha}
+        \STATE{Retorna o ponto de $v$ se estiver dentro da $Busca$}
+        \ELSE
+        \STATE{
+            \IF{$regiao(fe(v))$ está contido na $Busca$}
+            \STATE{$RetornaSubarvore(v)$}
+            \ELSE
+            \STATE{
+                \IF{$regiao(fe(v))$ intersecta $Busca$}
+                \STATE{
+                    $BuscaEmArvoreKD(fe(v), Busca)$
+                }
+                \ENDIF
+            }
+            \ENDIF
+
+            \IF{$regiao(fd(v))$ está contido na $Busca$}
+            \STATE{$RetornaSubarvore(v)$}
+            \ELSE
+            \STATE{
+                \IF{$regiao(fd(v))$ intersecta $Busca$}
+                \STATE{
+                    $BuscaEmArvoreKD(fd(v), Busca)$
+                }
+                \ENDIF
+            }
+            \ENDIF
+        }
+        \ENDIF
+    \end{algorithmic}
+\end{algorithm}
+
+A principal comparação realizada é checar se a área de \(Busca\) intersecta a região
+de um nodo \(v\). Para isso precisamos computar \(regiao(v)\) para todos os nodos \(v\)
+durante a fase de construção da arvore.
+Uma alternativa é manter a região salva nas chamadas recursivas usando as linhas guardadas
+nos nodos internos. Por exemplo a região correspondente ao filho esquerda de um nodo
+\(v\) em uma profundidade par (no exemplo 2D, analisamos no eixo \(x\)) pode ser calculado com:
+\[
+    regiao(fe(v)) = regiao(v) \cap l(v)^{esquerda}
+\],
+onde \(l(v)\) é a linha que divide o eixo salvo em \(v\), e \(l(v)^{esquerda}\) é a metade
+esquerda do plano.
+
 
 % ----------------------------------------------------------
 \section{Arvore de Intervalos}
@@ -165,7 +242,6 @@ Este sendo então o nodo folha.
 % \begin{equation}\label{eq:Eq_2}
 % 	\gls{A} = \gls{pi} \gls{r}^2
 % \end{equation}
-
 % ----------------------------------------------------------
 \section{Arvore de Segmentos}
 % ----------------------------------------------------------
