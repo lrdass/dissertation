@@ -8,7 +8,6 @@
         "plaintext",
         "latex"
     ],
-    "latex-workshop.chktex.delay": 5000,
-    "latex-workshop.latex.autoBuild.run": "never",
-    "latex-workshop.latex.autoClean.run": "onBuilt"
+    "latex.build.onSave": true,
+    "latex.build.outputDirectory": "./dist/",
 }

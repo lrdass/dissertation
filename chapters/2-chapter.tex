@@ -1,5 +1,5 @@
 % ----------------------------------------------------------
-\chapter{Fundamentação teórica}\label{cap:desenvolvimento}
+\chapter{Estruturas de busca de pontos}\label{cap:desenvolvimento}
 % ----------------------------------------------------------
 Neste capitulo apresenta-se uma visão de como funcionam os algoritmos e estruturas de dados base para o desenvolvimento
 de algoritmos para renderização em janela acesso rápido para estruturas geométricas.
@@ -21,7 +21,7 @@ x, a subárvore a esquerda contem os pontos com o eixo x menor que o ponto de co
 \begin{figure}[htb]
     \caption{\label{fig:Fig_1}Arvore k\textit{dimensional} - 3D}
     \begin{center}
-        \includegraphics[width=\linewidth/2]{images/3dtree.png}
+        \includegraphics[width=\linewidth/2]{./images/3dtree.png}
     \end{center}
     \fonte{GPL}
 \end{figure}
@@ -31,12 +31,12 @@ A termos didáticos segue a construção da arvore KD de 2 dimensões.
 Seja \textit{P} o conjunto de \textit{n} pontos em um plano.
 
 Uma busca de alcance 2-dimensional em \textit{P} é uma busca de quais pontos da busca estão
-entre o retângulo de busca \([x,x'] X [y,y']\). Um ponto \textit{p}\(:= (p_x, p_y)\) está dentro do retângulo
+entre o retângulo de busca \([x,x']  \times  [y,y']\). Um ponto \(p:= (p_x, p_y)\) está dentro do retângulo
 de busca se e somente se:
 
 \[
-    p_x \in [x, x']  \text{ e } p_y \in [y,y']
-\].
+p_x \in [x, x'] \textrm{ e } p_y \in [y, y`]
+\]
 
 Podemos dizer que uma busca 2-dimensional é composta de duas sub-buscas 1-dimensional, uma no
 eixo \(x\)-coordenada de um dos pontos e um na \(y\)-coordenada.
@@ -73,37 +73,38 @@ A condição de parada é até quando o conjunto de pontos restantes contiver ap
 Este sendo então o nodo folha.
 
 
-\begin{algorithm}
-    \caption{ConstroiArvoreKD($Pontos, profundidade$)}
-    \begin{algorithmic}
-        \IF{P contem apenas um ponto}
-        \RETURN $P$
-        \ELSE
-        \STATE{
-            \IF{$profundidade$ é par}
-            \STATE{
-                Divide P em dois subconjuntos com um linha vertical $l$ pela mediana da $x-coordenada$
-                dos pontos em P. Seja $P_1$ o conjunto dos pontos à esquerda de $l$ e seja
-                $P_2$ o conjunto de pontos à direita de $l$.
-            }
-            \ELSE
-            \STATE{
-                Divide P em dois subconjuntos com um linha horizontal $l$ pela mediana da $y-coordenada$
-                dos pontos em P. Seja $P_1$ o conjunto dos pontos acima de $l$ e seja
-                $P_2$ o conjunto de pontos à abaixo de $l$.
-            }
-            \ENDIF
-        }
-        \ENDIF
+\begin{algorithm}\caption{The Bellman-Kalaba algorithm}\begin{algorithmic}[1]\Procedure {BellmanKalaba}{$G$, $u$, $l$, $p$}\ForAll {$v \in V(G)$}\State $l(v) \leftarrow \infty$\EndFor\State $l(u) \leftarrow 0$\Repeat\For {$i \leftarrow 1, n$}\State $min \leftarrow l(v_i)$\For {$j \leftarrow 1, n$}\If {$min > e(v_i, v_j) + l(v_j)$}\State $min \leftarrow e(v_i, v_j) + l(v_j)$\State $p(i) \leftarrow v_j$\EndIf\EndFor\State $l’(i) \leftarrow min$\EndFor\State $changed \leftarrow l \not= l’$\State $l \leftarrow l’$\Until{$\neg changed$}\EndProcedure\Statex\Procedure {FindPathBK}{$v$, $u$, $p$}\If {$v = u$}\State \textbf{Write} $v$\Else\State $w \leftarrow v$\While {$w \not= u$}\State \textbf{Write} $w$\State $w \leftarrow p(w)$\EndWhile\EndIf\EndProcedure\end{algorithmic}\end{algorithm}
+% \begin{algorithm}
+%     \caption{ConstroiArvoreKD($Pontos, profundidade$)}
+%     \begin{algorithmic}
+%         \IF{P contem apenas um ponto}
+%         \RETURN $P$
+%         \ELSE
+%         \STATE{
+%             \IF{$profundidade$ é par}
+%             \STATE{
+%                 Divide P em dois subconjuntos com um linha vertical $l$ pela mediana da $x-coordenada$
+%                 dos pontos em P. Seja $P_1$ o conjunto dos pontos à esquerda de $l$ e seja
+%                 $P_2$ o conjunto de pontos à direita de $l$.
+%             }
+%             \ELSE
+%             \STATE{
+%                 Divide P em dois subconjuntos com um linha horizontal $l$ pela mediana da $y-coordenada$
+%                 dos pontos em P. Seja $P_1$ o conjunto dos pontos acima de $l$ e seja
+%                 $P_2$ o conjunto de pontos à abaixo de $l$.
+%             }
+%             \ENDIF
+%         }
+%         \ENDIF
 
-        \STATE $v_{esquerda} \leftarrow $ ConstroiArvoreKD($P_1, profundidade+1$)
-        \STATE $v_{direita} \leftarrow $ ConstroiArvoreKD($P_2, profundidade+1$)
-        Cria um nodo $v$ guardando $l$ e fazendo $v_esquerda$ o nodo da esquerda
-        de $v$ e fazendo $v_direita$ nodo da direita de $v$.
+%         \STATE $v_{esquerda} \leftarrow $ ConstroiArvoreKD($P_1, profundidade+1$)
+%         \STATE $v_{direita} \leftarrow $ ConstroiArvoreKD($P_2, profundidade+1$)
+%         Cria um nodo $v$ guardando $l$ e fazendo $v_esquerda$ o nodo da esquerda
+%         de $v$ e fazendo $v_direita$ nodo da direita de $v$.
 
-        \RETURN $v$
-    \end{algorithmic}
-\end{algorithm}
+%         \RETURN $v$
+%     \end{algorithmic}
+% \end{algorithm}
 
 \subsection{Busca com alcance}
 
@@ -137,40 +138,40 @@ todos os pontos nas suas folhas. Segue como notação \(fe(v)\) sendo o filho da
 \(fd(v)\) o filho da direita do nodo \(v\).
 
 
-\begin{algorithm}
-    \caption{BuscaEmArvoreKD($v, Busca$)}
-    \begin{algorithmic}
-        \IF{v é folha}
-        \STATE{Retorna o ponto de $v$ se estiver dentro da $Busca$}
-        \ELSE
-        \STATE{
-            \IF{$regiao(fe(v))$ está contido na $Busca$}
-            \STATE{$RetornaSubarvore(v)$}
-            \ELSE
-            \STATE{
-                \IF{$regiao(fe(v))$ intersecta $Busca$}
-                \STATE{
-                    $BuscaEmArvoreKD(fe(v), Busca)$
-                }
-                \ENDIF
-            }
-            \ENDIF
+% \begin{algorithm}
+%     \caption{BuscaEmArvoreKD($v, Busca$)}
+%     \begin{algorithmic}
+%         \IF{v é folha}
+%         \STATE{Retorna o ponto de $v$ se estiver dentro da $Busca$}
+%         \ELSE
+%         \STATE{
+%             \IF{$regiao(fe(v))$ está contido na $Busca$}
+%             \STATE{$RetornaSubarvore(v)$}
+%             \ELSE
+%             \STATE{
+%                 \IF{$regiao(fe(v))$ intersecta $Busca$}
+%                 \STATE{
+%                     $BuscaEmArvoreKD(fe(v), Busca)$
+%                 }
+%                 \ENDIF
+%             }
+%             \ENDIF
 
-            \IF{$regiao(fd(v))$ está contido na $Busca$}
-            \STATE{$RetornaSubarvore(v)$}
-            \ELSE
-            \STATE{
-                \IF{$regiao(fd(v))$ intersecta $Busca$}
-                \STATE{
-                    $BuscaEmArvoreKD(fd(v), Busca)$
-                }
-                \ENDIF
-            }
-            \ENDIF
-        }
-        \ENDIF
-    \end{algorithmic}
-\end{algorithm}
+%             \IF{$regiao(fd(v))$ está contido na $Busca$}
+%             \STATE{$RetornaSubarvore(v)$}
+%             \ELSE
+%             \STATE{
+%                 \IF{$regiao(fd(v))$ intersecta $Busca$}
+%                 \STATE{
+%                     $BuscaEmArvoreKD(fd(v), Busca)$
+%                 }
+%                 \ENDIF
+%             }
+%             \ENDIF
+%         }
+%         \ENDIF
+%     \end{algorithmic}
+% \end{algorithm}
 
 A principal comparação realizada é checar se a área de \(Busca\) intersecta a região
 de um nodo \(v\). Para isso precisamos computar \(regiao(v)\) para todos os nodos \(v\)
