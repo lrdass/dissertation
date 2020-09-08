@@ -10,4 +10,11 @@
     ],
     "latex.build.onSave": true,
     "latex.build.outputDirectory": "./dist/",
+    "latex.build.args": [
+        "-output-directory=./dist/",
+        "-pdf",
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "%f"
+    ],
 }
