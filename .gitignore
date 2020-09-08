@@ -4,5 +4,5 @@
 *.loq
 *.ilg
 *.bcf
-./dist/*
-./dist
+dist/*
+dist/**
