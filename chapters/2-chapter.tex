@@ -1,82 +1,83 @@
 % ----------------------------------------------------------
 \chapter{Estruturas de busca de pontos}\label{cap:desenvolvimento}
 % ----------------------------------------------------------
-Neste capitulo apresentamos uma visão de como funcionam os algoritmos e estruturas de dados fundamentais para o desenvolvimento
-de algoritmos para renderização em janela acesso rápido para estruturas geométricas.
-Sao os algoritmos e estruturas de dados base para a construção de um controle de janela para acesso rapido de poligonos
-em janela.
+Neste capitulo apresentamos uma visão de como funcionam as consultas de objetos geométricos. 
+São os algoritmos e estruturas de dados base para a construção de um controle de janela para acesso rápido de polígonos
+em um mundo e queremos saber quais polígonos estão na consulta.
 
 % ----------------------------------------------------------
-\section{Arvores KD}
+\section{Árvore KD}
 % ----------------------------------------------------------
 
-Uma Arvore KD é uma arvore binaria onde cada folha é um ponto \textit{k-dimensional}.
-E cada nodo não-folha é um corte do espaço, representando implicitamente um hiperplano.
-Pontos a esquerda desse hiperplano estão na subárvore da esquerda, e respectivamente para o lado direito.
-Cada nodo é associado com uma das \textit{k dimensões}. Então, a citar um exemplo, se dado nodo divide o eixo
+Árvore KD é uma árvore binaria onde cada folha é um ponto \textit{k-dimensional}.
+Cada nó não-folha é um corte em uma dimensão, representando implicitamente um hiperplano.
+Pontos à esquerda desse hiperplano estão na subárvore da esquerda, e respectivamente para o lado direito.
+Cada nó é associado com uma das \textit{k dimensões}. Então, a citar um exemplo, se dado nó divide o eixo
 x, a subárvore a esquerda contem os pontos com o eixo x menor que o ponto de corte.
 
 \begin{figure}[htb]
-    \caption{\label{fig:Fig_1}Arvore k\textit{dimensional} - 3D}
+    \caption{\label{fig:Fig_1}Árvore \textit{3-dimensional}}
     \begin{center}
         \includegraphics[width=\linewidth/2]{./images/3dtree.png}
     \end{center}
     \fonte{GPL}
 \end{figure}
 
-\subsection{Construção da Árvore}
-A termos didáticos segue a construção da arvore KD de 2 dimensões.
-Seja \textit{P} o conjunto de \textit{n} pontos em um plano.
+\subsection{Arvore 2D}
+Arvore 2-dimensional é a implementação com apenas dois eixos de coordenadas.
 
-Uma busca de alcance 2-dimensional em \textit{P} é uma busca de quais pontos da busca estão
-entre o retângulo de busca \([x,x']  \times  [y,y']\). Um ponto \(p:= (p_x, p_y)\) está dentro do retângulo
-de busca se e somente se:
+A termos didáticos segue a construção da árvore KD de 2 dimensões \textit(2-dimensional).
+Seja $P$ o conjunto de $n$ pontos em um plano.
+
+Uma consulta de alcance 2-dimensional em $P$ é uma busca de quais pontos de $P$ da busca estão
+entre um retângulo de consulta \([x,x']  \times  [y,y']\). 
+Um ponto $p:= (p_x, p_y)$ está dentro de um retângulo de busca se e somente se:
 
 \[
 p_x \in [x, x'] \textrm{ e } p_y \in [y, y`]
 \]
 
-Podemos dizer que uma busca 2-dimensional é composta de duas sub-buscas 1-dimensional, uma no
-eixo \(x\)-coordenada de um dos pontos e um na \(y\)-coordenada.
+Podemos dizer que uma consulta 2-dimensional é composta de duas sub-consultas 1-dimensional: uma no
+eixo \(x\) de um dos pontos e uma consulta no eixo \(y\).
 
 \begin{figure}[htb]
     \caption{\label{fig:Fig_2}Busca em alcance \textit{dimensional} - 2D}
     \begin{center}
         \includegraphics{images/search_range.png}
     \end{center}
-    \fonte{Computational Geometry}
+    \citetitle{comp-geo}
 \end{figure}
 
-Na construção de uma arvore para 2 dimensões, cada ponto tem uma \(x\)-coordenada e uma
-\(y\)-coordenada.
-Seguimos então escolhendo um eixo inicial e salvando o valor de corte deste eixo que divide
-os pontos deste eixo em dois conjuntos, e no próximo nível da arvore, alterna-se o eixo e repete-se
-o processo recursivamente.
-
+\subsection{Construção da Árvore 2-dimensional}
+Na construção de uma árvore para 2 dimensões, cada ponto tem uma forma: 
+    \[p = (x, y) \]
+Escolhemos um eixo para iniciar a construção da árvore. Ordenamos os pontos de $P$ pelo eixo escolhido.
+O valor da mediana dos pontos ordenados pelo eixo será o valor de corte do conjunto $P$, e serão criados dois subconjuntos.
+Chama-se recursivamente a construção da árvore alternando o eixo e passando os subconjuntos.
 
 \begin{figure}[htb]
-    \caption{\label{fig:Fig_3} Arvore 2D}
+    \caption{\label{fig:Fig_3} Árvore 2D}
     \begin{center}
         \includegraphics{images/kd_tree1.png}
     \end{center}
 \end{figure}
 
-Na raiz ordena-se todos os pontos e divide o conjunto de pontos \(P\) com uma linha vertical
-\(l\) que divide os pontos pelo eixo \(x\). Guarda-se o valor de \(x_v\) no nodo e alterna-se o
-eixo.
-Agora, recursivamente repete o processo para os dois subconjuntos de pontos:
-Ordena-se os pontos pelo eixo \(y\) e divide o conjunto e encontra-se a reta horizontal que
-subdivide os pontos e guarda no nodo do valor de corte \(y\).
-A condição de parada é até quando o conjunto de pontos restantes contiver apenas um ponto.
-Este sendo então o nodo folha.
 
+Seja $P$ conjunto de pontos. Inicialmente escolhemos o $eixo-x$. Acompanharemos a troca de eixos segundo a profundidade da árvore.
+Caso a profundidade seja $par$, ordenaremos pelo eixo $x$, do contrário pelo eixo $y$.
+Fazemos uma $x-ordenação$ em $P$ e encontramos o valor $x_{mediana}$.
+Criamos dois subconjuntos $P_1$ e $P_2$ tal que:
+    \[P_1 \leftarrow p \forall p_{x} \leq x_{mediana} \]
+    \[P_2 \leftarrow p \forall p_{x} > x_{mediana} \]
+Agora, recursivamente, repete-se para os dois novos conjuntos criados até restar somente um ponto. Este, por sua vez, será um nó folha.
 
 \begin{algorithm}
-    \caption{Algorítimo para construção da arvore KD}
+    \caption{O algorítimo \Call{ConstroiArvore2D}{$P$, $profundidade=0$}, recebe um conjunto de pontos $P$ no plano e uma profundidade da árvore.
+    O algoritmo retorna a raiz de uma árvore 2D}
     \begin{algorithmic}[1]
-        \Function{ConstroiArvoreKD}{$P$, $profundidade$}
+        \Function{ConstroiArvore2D}{$P$, $profundidade$}
             \If{P contem apenas um ponto}
-            \Return $P$
+            \Return $nó \leftarrow ponto$
         \Else
             \If{$profundidade$ é par}
             \State
@@ -90,67 +91,69 @@ Este sendo então o nodo folha.
                 $P_2$ o conjunto de pontos à abaixo de $l$.
             \EndIf
         \EndIf
-        \State $v_{esquerda} \leftarrow $ \Call{ConstroiArvoreKD}{$P_1, profundidade+1$}
-        \State $v_{direita} \leftarrow $ \Call{ConstroiArvoreKD}{$P_2, profundidade+1$}
-        \State Cria um nodo $v$ guardando $l$ e fazendo $v_{esquerda}$ o nodo da esquerda
-        de $v$ e fazendo $v_{direita}$ nodo da direita de $v$.
+        \State $v_{esquerda} \leftarrow $ \Call{ConstroiArvore2D}{$P_1, profundidade+1$}
+        \State $v_{direita} \leftarrow $ \Call{ConstroiArvore2D}{$P_2, profundidade+1$}
+        \State Cria um nó $v$, associamos o valor $l$ e associamos os filhos $v_{esquerda}$ e $v_{direita}$ 
 
         \Return $v$
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
-\subsection{Busca com alcance}
+\subsection{Consulta}
 
-Agora retomamos para o algoritmo de busca. Podemos imaginar que os pontos na subárvore à esquerda
-da raiz, estão limitados à direita pela reta com o eixo \(x\) com valor de \(x \leq l_1\).
-Enquanto os pontos na subárvore à direita do nodo \(l_1\) estão limitados com o eixo \(x > l_1\).
+Agora retomamos para o algoritmo de consulta. Podemos supor que os pontos na subárvore à esquerda
+da raiz, possuindo $x$-coordenada no máximo igual ao valor de $l_1$ armazenado na raiz.
+Enquanto os pontos na subárvore à direita do nó raiz possuem $y$-coordenada maior que $l_1$.
 
-A exemplo: o nodo \(l_4\), a região correspondente de \(l_4\) é limitada à esquerda de
+A exemplo: a região correspondente do nó \(l_4\) é limitada à esquerda de
 \(l_1\) e abaixo de \(y\) do nodo \(l_2\).
 
+
 \begin{figure}[htb]
-    \caption{\label{fig:Fig_4} Área respectiva de um nodo}
+    \caption{\label{fig:Fig_4} Área respectiva do nó $l_4$}
     \begin{center}
         \includegraphics{images/kd_tree2.png}
     \end{center}
 \end{figure}
 
-Denotaremos esta área de um nodo \(v\) como \(regiao(v)\). A região da raiz é simplesmente
-(no caso de uma arvore 2D) o plano inteiro.
-Portanto o algoritmo buscará a subárvore de \(v\) somente se o retângulo de busca intersectar
+Denotaremos esta área de um nó \(v\) como \(regiao(v)\). A região da raiz é simplesmente
+(no caso de uma árvore 2D) o plano inteiro.
+Portanto, o algoritmo buscará a subárvore de \(v\) somente se o retângulo de busca intersectar
 a \(regiao(v)\).
-O algoritmo de busca funciona descendo a arvore mas visitando somente os nodos que a
-\(regiao(v)\) intersecta o retângulo da busca. Quando uma \(regiao(v)\) esta contido no
+
+O algoritmo de busca funciona descendo a árvore, mas visitando somente os nós que a
+\(regiao(v)\) intersecta o retângulo da consulta. Quando uma \(regiao(v)\) está contido no
 retângulo de busca retornamos todos os pontos na subárvore.
-Quando chegarmos nos nodos folhas temos de checar se o nodo esta dentro da busca, se tiver,
+Quando chegarmos nos nós folha temos de checar se o nodo esta dentro da consulta, se estiver,
 retorna-o.
 
-Segue o algoritmo que recebe como parâmetros a raiz da arvore-KD e o retângulo de busca \(R\).
-Usa-se uma chamada \(RetornaSubarvore(v)\) que atravessa a arvore de nodo \(v\) e retorna
-todos os pontos nas suas folhas. Segue como notação \(fe(v)\) sendo o filho da esquerda e
-\(fd(v)\) o filho da direita do nodo \(v\).
+Segue o algoritmo que recebe como parâmetros a raiz da arvore2D e o retângulo de consulta \(R\).
+Usamos uma chamada \(RetornaSubarvore(v)\) que atravessa a árvore do nó \(v\) e retorna
+todos os pontos nas suas folhas. Segue como notação \(filho_{esquerda}(v)\) sendo o filho da esquerda e
+\(filho_{direita}(v)\) o filho da direita do nodo \(v\).
 
 
 \begin{algorithm}
-    \caption{BuscaEmArvoreKD($v, consulta$)}
+    \caption{A função \Call{BuscaEmArvore2D}{$v$, $consulta$} recebe como parâmetro um nó e uma consulta. E retorna todos os pontos
+     dentro da consulta.}
     \begin{algorithmic}[1]
     \Function{BuscaEmArvore}{$v$, $consulta$}
         \If{v é folha}
         \Return  $v$ se estiver dentro da $consulta$
         \Else
-            \If{$regiao(fe(v))$ está contido na $Busca$}
-            \State \Return $SubArvore( fe(v) )$
+            \If{$regiao(filho_{esquerda}(v))$ está contido na $consulta$}
+            \State \Return $SubArvore( filho_{esquerda}(v) )$
             \Else
-                \If{$regiao(fe(v))$ intersecta $Busca$}
-                \State \Call{BuscaEmArvoreKD(fe(v), Busca)}
+                \If{$regiao(filho_{esquerda}(v))$ intersecta $consulta$}
+                \State \Call{BuscaEmArvore2D}{$filho_{esquerda}(v)$, $consulta$}
                 \EndIf
             \EndIf
-            \If{$regiao(fd(v))$ está contido na $Busca$}
-            \State \Return $SubArvore(fd(v))$
+            \If{$regiao(filho_{direita}(v))$ está contido na $consulta$}
+            \State \Return $SubArvore(filho_{direita}(v))$
             \Else
-                \If{$regiao(fd(v))$ intersecta $Busca$}
-                \State \Call{BuscaEmArvoreKD}{$fd(v)$, $consulta$}
+                \If{$regiao(filho_{direita}(v))$ intersecta $busca$}
+                \State \Call{BuscaEmArvore2D}{$filho_{direita}(v)$, $consulta$}
                 \EndIf
             \EndIf
         \EndIf
@@ -158,20 +161,50 @@ todos os pontos nas suas folhas. Segue como notação \(fe(v)\) sendo o filho da
     \end{algorithmic}
 \end{algorithm}
 
-A comparação realizada é checar se a área de \(Busca\) intersecta a região
+A comparação realizada é checar se a área \(consulta\) intersecta a região
 de um nodo \(v\). Para isso precisamos computar \(regiao(v)\) para todos os nodos \(v\)
-durante a fase de construção da arvore.
+durante a fase de construção da árvore.
 Uma alternativa é manter a região salva nas chamadas recursivas usando as linhas guardadas
 nos nodos internos. Por exemplo a região correspondente ao filho esquerda de um nodo
 \(v\) em uma profundidade par (no exemplo 2D, analisamos no eixo \(x\)) pode ser calculado com:
 \[
-    regiao(fe(v)) = regiao(v) \cap l(v)^{esquerda}
-\],
+    regiao(filho_{esquerda}(v)) = regiao(v) \cap l(v)^{esquerda}
+\]
 onde \(l(v)\) é a linha que divide o eixo salvo em \(v\), e \(l(v)^{esquerda}\) é a metade
 esquerda do plano.
+Salvando apenas os intervalos respectivos de cada nível da árvore. 
+
+\section{Resultados}
+\begin{figure}[htb]
+    \caption{\label{fig:Fig_5} - Resultados de busca com Arvore2D}
+    \begin{center}
+        \includegraphics{images/points.pdf}
+    \end{center}
+\end{figure}
 
 
-% ----------------------------------------------------------
+Na Figura 5 temos os pontos:
+
+(70.0, 73.0), (-10.0, 24.0), (0.0, 0.0), (-44.0, 39.0), (-49.0, 3.0), (15.0, 56.0), 
+(-9.0, -44.0), (23.0, 21.0), (-43.0, -13.0), (-6.0, -13.0), (18.0, 31.0), (8.0, -19.0),
+ (24.0, 13.0)
+
+E a consulta (o retangulo em vermelho) as coordenadas: (-50, -10), (50, 40), (-50, 40), (50, -10)
+
+Retornando corretamente o conjunto de pontos:
+
+(-49.0, 3.0),
+(-44.0, 39.0),
+(-10.0, 24.0),
+(0.0, 0.0),
+(18.0, 31.0),
+(23.0, 21.0),
+(24.0, 13.0)
+
+Sendo facilmente verificável apenas constatando que os valores $x$:
+\[ x \leq 50 \textrm{ e } x > -50 \]
+\[ y \leq 10 \textrm{ e } y > -10 \]
+
 \section{Arvore de Intervalos}
 % ----------------------------------------------------------
 

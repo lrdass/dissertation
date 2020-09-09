@@ -18,4 +18,7 @@
         "%f"
     ],
     "languageToolLinter.languageTool.motherTongue": "pt-BR",
+    "languageToolLinter.languageTool.language": "pt-BR",
+    "ltex.additionalRules.motherTongue": "pt-BR",
+    "ltex.language": "pt-BR",
 }
