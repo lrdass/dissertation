@@ -17,4 +17,5 @@
         "-synctex=1",
         "%f"
     ],
+    "languageToolLinter.languageTool.motherTongue": "pt-BR",
 }
