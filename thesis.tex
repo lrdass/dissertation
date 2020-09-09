@@ -66,33 +66,33 @@
 \usepackage{algorithm}				% para geração de dummy text
 \usepackage{algpseudocode}				% para geração de dummy text
 % ---
-
-% ---
 % Pacotes de citações
 % ---
-\usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
-\usepackage[alf]{abntex2cite}	% Citações padrão ABNT
-
+% \usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
+% \usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+\usepackage[style=abnt]{biblatex}
+\addbibresource{aftertext/references.bib}
 % --- 
 % CONFIGURAÇÕES DE PACOTES
+
 % --- 
 
-% ---
-% Configurações do pacote backref
-% Usado sem a opção hyperpageref de backref
-\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
-% Texto padrão antes do número das páginas
-\renewcommand{\backref}{}
-% Define os textos da citação
-\renewcommand*{\backrefalt}[4]{
-	\ifcase #1 %
-		Nenhuma citação no texto.%
-	\or
-		Citado na página #2.%
-	\else
-		Citado #1 vezes nas páginas #2.%
-	\fi}%
-% ---
+% % ---
+% % Configurações do pacote backref
+% % Usado sem a opção hyperpageref de backref
+% \renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+% % Texto padrão antes do número das páginas
+% \renewcommand{\backref}{}
+% % Define os textos da citação
+% \renewcommand*{\backrefalt}[4]{
+% 	\ifcase #1 %
+% 		Nenhuma citação no texto.%
+% 	\or
+% 		Citado na página #2.%
+% 	\else
+% 		Citado #1 vezes nas páginas #2.%
+% 	\fi}%
+% % ---
 
 % ---
 % Informações de dados para CAPA e FOLHA DE ROSTO
@@ -145,7 +145,6 @@ as normas ABNT apresentado à comunidade de usuários \LaTeX.}
 % --- 
 % Espaçamentos entre linhas e parágrafos 
 % --- 
-
 % O tamanho do parágrafo é dado por:
 \setlength{\parindent}{1.3cm}
 
@@ -179,62 +178,28 @@ as normas ABNT apresentado à comunidade de usuários \LaTeX.}
 % 1 - Introdução
 % ---
 % ----------------------------------------------------------
-% PARTE
-% ----------------------------------------------------------
-\part{Preparação da pesquisa}
-% ----------------------------------------------------------
 \include{chapters/1-chapter}
 % ---
-
-\lipsum[1]
 % ---
 % 2 - Capítulo 2
 % ---
 % ----------------------------------------------------------
-% PARTE
-% ----------------------------------------------------------
-\part{Referenciais teóricos}
-% ----------------------------------------------------------
 \include{chapters/2-chapter}
-% ---
-
 % ---
 % 3 - Capítulo 3
 % ---
 \include{chapters/3-chapter}
 % ---
-
-\lipsum[2-3]
-
-% ---
 % 4 - Conclusão
 % ---
 %\phantompart
-
-% ----------------------------------------------------------
-% PARTE
-% ----------------------------------------------------------
-\part{Resultados}
-% ----------------------------------------------------------
 \include{chapters/4-chapter}
-
-\chapter*[Conclusão]{Conclusão}
-\addcontentsline{toc}{chapter}{Conclusão}
 % ---
-
-\lipsum[31-33]
-
 % ----------------------------------------------------------
 % Finaliza a parte no bookmark do PDF
 % para que se inicie o bookmark na raiz
 % e adiciona espaço de parte no Sumário
 % ----------------------------------------------------------
-%\phantompart
-
-% ---
-% Conclusão (outro exemplo de capítulo sem numeração e presente no sumário)
-% ---
-
 % ----------------------------------------------------------
 % ELEMENTOS PÓS-TEXTUAIS
 % ----------------------------------------------------------
@@ -244,17 +209,15 @@ as normas ABNT apresentado à comunidade de usuários \LaTeX.}
 % Referências bibliográficas
 % ----------------------------------------------------------
 \begingroup
-\printbibliography[title=REFERÊNCIAS]
+\printbibliography[title=Referencias]
 \endgroup
-
 % ----------------------------------------------------------
 % Glossário
 % ----------------------------------------------------------
 %
 % Consulte o manual da classe abntex2 para orientações sobre o glossário.
 %
-%\glossary
-
+% \glossary
 % ----------------------------------------------------------
 % Apêndices
 % ----------------------------------------------------------
@@ -285,7 +248,8 @@ as normas ABNT apresentado à comunidade de usuários \LaTeX.}
 % INDICE REMISSIVO
 %---------------------------------------------------------------------
 %\phantompart
-%\printindex
+\printindex
+%
 %---------------------------------------------------------------------
 
 \end{document}
