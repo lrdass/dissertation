@@ -6,3 +6,4 @@
 *.bcf
 dist/*
 dist/**
+*.bak
