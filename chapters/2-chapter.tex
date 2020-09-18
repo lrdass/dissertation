@@ -1,19 +1,23 @@
 % ----------------------------------------------------------
-\chapter{Estruturas de busca de pontos}\label{cap:desenvolvimento}
+\chapter{Algoritmos e estruturas de dados para consulta de pontos no plano}\label{cap:desenvolvimento}
 % ----------------------------------------------------------
-Neste capitulo apresentamos uma visão de como funcionam as consultas de objetos geométricos. 
-São os algoritmos e estruturas de dados base para a construção de um controle de janela para acesso rápido de polígonos
-em um mundo e queremos saber quais polígonos estão na consulta.
+Nesta seção veremos formas de construir estruturas de dados para um conjunto de pontos no plano. 
+Consideramos que os pontos são fixos. Para cada estrutura construída, veremos também como utilizá-la para
+consultar pontos dentro de uma janela.
 
 % ----------------------------------------------------------
 \section{Árvore KD}
 % ----------------------------------------------------------
 
-Árvore KD é uma árvore binaria onde cada folha é um ponto \textit{k-dimensional}.
-Cada nó não-folha é um corte em uma dimensão, representando implicitamente um hiperplano.
-Pontos à esquerda desse hiperplano estão na subárvore da esquerda, e respectivamente para o lado direito.
-Cada nó é associado com uma das \textit{k dimensões}. Então, a citar um exemplo, se dado nó divide o eixo
-x, a subárvore a esquerda contem os pontos com o eixo x menor que o ponto de corte.
+Uma árvore KD é uma árvore binaria onde cada folha é um ponto \textit{k-dimensional}.
+Cada nó não-folha é um valor $v$ em uma dimensão $d$, representando implicitamente um hiperplano.
+Pontos cujo os valores na dimensão $d$ são iguais ou menores a $v$ estão na subárvore da esquerda de $v$,
+e respectivamente, pontos maiores que $v$ estão para o lado direito.
+Cada nó é associado com uma das \textit{k dimensões}. Então, a citar um exemplo no plano, se dado nó
+ divide o eixo
+$x$, a subárvore a esquerda contem os pontos com o eixo $x$ menor que o ponto de corte. Similarmente,
+ ã direita contem
+os pontos com o eixo $x$ maior que o ponto de corte. 
 
 \begin{figure}[htb]
     \caption{\label{fig:Fig_1}Árvore \textit{3-dimensional}}
@@ -24,12 +28,12 @@ x, a subárvore a esquerda contem os pontos com o eixo x menor que o ponto de co
 \end{figure}
 
 \subsection{Arvore 2D}
-Arvore 2-dimensional é a implementação com apenas dois eixos de coordenadas.
+Uma árvore 2D é a versão com duas dimensões para árvores KD.
 
-A termos didáticos segue a construção da árvore KD de 2 dimensões \textit(2-dimensional).
-Seja $P$ o conjunto de $n$ pontos em um plano.
+A construção de uma árvore 2D pode ser feita da seguinte forma.
+É dado um conjunto $P$ de $n$ pontos no plano.
 
-Uma consulta de alcance 2-dimensional em $P$ é uma busca de quais pontos de $P$ da busca estão
+Uma consulta 2-dimensional em $P$ é uma busca de quais pontos de $P$ da busca estão
 entre um retângulo de consulta \([x,x']  \times  [y,y']\). 
 Um ponto $p:= (p_x, p_y)$ está dentro de um retângulo de busca se e somente se:
 
@@ -48,11 +52,14 @@ eixo \(x\) de um dos pontos e uma consulta no eixo \(y\).
 \end{figure}
 
 \subsection{Construção da Árvore 2-dimensional}
-Na construção de uma árvore para 2 dimensões, cada ponto tem uma forma: 
-    \[p = (x, y) \]
-Escolhemos um eixo para iniciar a construção da árvore. Ordenamos os pontos de $P$ pelo eixo escolhido.
-O \cite{ab94} valor da mediana dos pontos ordenados pelo eixo será o valor de corte do conjunto $P$, e serão criados dois subconjuntos.
-Chama-se recursivamente a construção da árvore alternando o eixo e passando os subconjuntos.
+Na construção de uma árvore para 2 dimensões, cada ponto tem uma forma $P : (P_x, P_y)$ .
+Escolhemos um eixo para iniciar a construção da árvore. Ao iniciar a construção da arvore,
+ordenamos os pontos de $P$ pelo eixo escolhido. A ordenação acontecerá ao menos $n$ dimensões
+vezes, uma vez em cada eixo.
+O \cite{cg08} valor da mediana dos pontos ordenados pelo eixo será o valor de corte do conjunto $P$,
+e serão criados dois subconjuntos.
+Chama-se recursivamente a construção das subárvores ã esquerda e ã direita de $v$ alternando o eixo 
+e passando os subconjuntos.
 
 \begin{figure}[htb]
     \caption{\label{fig:Fig_3} Árvore 2D}
@@ -62,16 +69,19 @@ Chama-se recursivamente a construção da árvore alternando o eixo e passando o
 \end{figure}
 
 
-Seja $P$ conjunto de pontos. Inicialmente escolhemos o $eixo-x$. Acompanharemos a troca de eixos segundo a profundidade da árvore.
+Seja $P$ conjunto de pontos. Inicialmente escolhemos o eixo-$x$. Acompanharemos a troca de eixos 
+segundo a profundidade da árvore.
 Caso a profundidade seja $par$, ordenaremos pelo eixo $x$, do contrário pelo eixo $y$.
-Fazemos uma $x-ordenação$ em $P$ e encontramos o valor $x_{mediana}$.
+Fazemos uma $x$-ordenação em $P$ e encontramos o valor $x_{mediana}$.
 Criamos dois subconjuntos $P_1$ e $P_2$ tal que:
-    \[P_1 \leftarrow p \forall p_{x} \leq x_{mediana} \]
-    \[P_2 \leftarrow p \forall p_{x} > x_{mediana} \]
-Agora, recursivamente, repete-se para os dois novos conjuntos criados até restar somente um ponto. Este, por sua vez, será um nó folha.
+    \[P_1 \leftarrow p : p \in P \textmd{ e } p_x \leq x_{mediana} \]
+    \[P_2 \leftarrow p : p \in P \textmd{ e } p_x  >  x_{mediana} \]
+Agora, recursivamente, repete-se para os dois novos conjuntos criados até restar somente um ponto.
+ Este, por sua vez, será um nó folha.
 
 \begin{algorithm}
-    \caption{O algorítimo \Call{ConstroiArvore2D}{$P$, $profundidade=0$}, recebe um conjunto de pontos $P$ no plano e uma profundidade da árvore.
+    \caption{O algorítimo \Call{ConstroiArvore2D}{$P$, $profundidade=0$}, recebe um conjunto de 
+    pontos $P$ no plano e uma profundidade da árvore.
     O algoritmo retorna a raiz de uma árvore 2D}
     \begin{algorithmic}[1]
         \Function{ConstroiArvore2D}{$P$, $profundidade$}
@@ -80,16 +90,17 @@ Agora, recursivamente, repete-se para os dois novos conjuntos criados até resta
         \Else
             \If{$profundidade$ é par}
             \State
-                Divide P em dois subconjuntos com um linha vertical $l$ pela mediana da $x-coordenada$
+                Divide P em dois subconjuntos com um linha vertical $l$ pela mediana da $x$-coordenada
                 dos pontos em P. Seja $P_1$ o conjunto dos pontos à esquerda de $l$ e seja
                 $P_2$ o conjunto de pontos à direita de $l$.
             \Else
             \State
-                Divide P em dois subconjuntos com um linha horizontal $l$ pela mediana da $y-coordenada$
-                dos pontos em P. Seja $P_1$ o conjunto dos pontos acima de $l$ e seja
-                $P_2$ o conjunto de pontos à abaixo de $l$.
+                Divide P em dois subconjuntos com um linha horizontal $l$ pela mediana da $y$-coordenada
+                dos pontos em P. Seja $P_1$ o conjunto dos pontos abaixo de $l$ e seja
+                $P_2$ o conjunto de pontos acima de $l$.
             \EndIf
         \EndIf
+        \State Cria os nós $v_{esquerda}$ e $v_{direita}$
         \State $v_{esquerda} \leftarrow $ \Call{ConstroiArvore2D}{$P_1, profundidade+1$}
         \State $v_{direita} \leftarrow $ \Call{ConstroiArvore2D}{$P_2, profundidade+1$}
         \State Cria um nó $v$, associamos o valor $l$ e associamos os filhos $v_{esquerda}$ e $v_{direita}$ 
@@ -103,10 +114,10 @@ Agora, recursivamente, repete-se para os dois novos conjuntos criados até resta
 
 Agora retomamos para o algoritmo de consulta. Podemos supor que os pontos na subárvore à esquerda
 da raiz, possuindo $x$-coordenada no máximo igual ao valor de $l_1$ armazenado na raiz.
-Enquanto os pontos na subárvore à direita do nó raiz possuem $y$-coordenada maior que $l_1$.
+Enquanto os pontos na subárvore à direita do nó raiz possuem $x$-coordenada maior que $l_1$.
 
 A exemplo: a região correspondente do nó \(l_4\) é limitada à esquerda de
-\(l_1\) e abaixo de \(y\) do nodo \(l_2\).
+\(l_1\) e abaixo \(l_2\).
 
 
 \begin{figure}[htb]
@@ -116,26 +127,27 @@ A exemplo: a região correspondente do nó \(l_4\) é limitada à esquerda de
     \end{center}
 \end{figure}
 
-Denotaremos esta área de um nó \(v\) como \(região(v)\). A região da raiz é simplesmente
-(no caso de uma árvore 2D) o plano inteiro.
-Portanto, o algoritmo buscará a subárvore de \(v\) somente se o retângulo de busca intersectar
+Denotaremos esta área de um nó \(v\) como \(região(v)\). A região da raiz é (no caso de uma árvore 2D) 
+o plano inteiro.
+Portanto, o algoritmo buscará pela subárvore com raiz \(v\) somente se o retângulo de busca intersectar
 a \(região(v)\).
 
 O algoritmo de busca funciona descendo a árvore, mas visitando somente os nós que a
-\(região(v)\) intersecta o retângulo da consulta. Quando uma \(região(v)\) está contido no
-retângulo de busca retornamos todos os pontos na subárvore.
+\(região(v)\) intersecta o retângulo da consulta. Quando uma \(região(v)\) está contida na
+janela de busca devolvemos todos os pontos na subárvore.
 Quando chegarmos nos nós folha temos de checar se o nodo esta dentro da consulta, se estiver,
-retorna-o.
+devolvê-lo.
 
 Segue o algoritmo que recebe como parâmetros a raiz da arvore2D e o retângulo de consulta \(R\).
-Usamos uma chamada \(RetornaSubarvore(v)\) que atravessa a árvore do nó \(v\) e retorna
+Usamos uma chamada \(RetornaSubárvore(v)\) que atravessa a árvore do nó \(v\) e retorna
 todos os pontos nas suas folhas. Segue como notação \(filho_{esquerda}(v)\) sendo o filho da esquerda e
-\(filho_{direita}(v)\) o filho da direita do nodo \(v\).
+\(filho_{direita}(v)\) o filho da direita do nó \(v\).
 
 
 \begin{algorithm}
-    \caption{A função \Call{BuscaEmArvore2D}{$v$, $consulta$} recebe como parâmetro um nó e uma consulta. E retorna todos os pontos
-     dentro da consulta.}
+    \caption{A função \Call{BuscaEmArvore2D}{$v$, $consulta$} recebe como parâmetro um nó e uma 
+    consulta.
+     E retorna todos os pontos dentro da consulta.}
     \begin{algorithmic}[1]
     \Function{BuscaEmArvore}{$v$, $consulta$}
         \If{v é folha}
@@ -171,7 +183,7 @@ nos nodos internos. Por exemplo, a região correspondente ao filho esquerda de u
 \]
 onde \(l(v)\) é a linha que divide o eixo salvo em \(v\), e \(l(v)^{esquerda}\) é a metade
 esquerda do plano.
-Salvando apenas os intervalos respectivos de cada nível da árvore. 
+Mantendo apenas os intervalos respectivos de cada nível da árvore. 
 
 \section{Resultados}
 \begin{figure}[htb]
@@ -207,76 +219,4 @@ Sendo facilmente verificável apenas constatando que os valores $x$:
 \section{Arvore de Intervalos}
 % ----------------------------------------------------------
 
-% No que diz respeito à estrutura do trabalho, recomenda-se que:
-% \begin{alineas}
-% 	\item o texto deve ser justificado, digitado em cor preta, podendo utilizar outras cores somente para as ilustrações;
-% 	\item utilizar papel branco ou reciclado para impressão;
-% 	\item os elementos pré-textuais devem iniciar no anverso da folha, com exceção da ficha catalográfica ou ficha de identificação da obra;
-% 	\item os elementos textuais e pós-textuais devem ser digitados no anverso e verso das folhas, quando o trabalho for impresso. As seções primárias devem começar sempre em páginas ímpares, quando o trabalho for impresso. Deixar um espaço entre o título da seção/subseção e o texto e entre o texto e o título da subseção.
-% \end{alineas}
-
-% No \autoref{qua:Quadro_1} estão as especificações para a formatação do texto.
-
-% \begin{quadro}[htb]
-% 	\centering
-% 	\caption{\label{qua:Quadro_1}Formatação do texto.}
-% 	\begin{tabular}{|l|p{11cm}|}
-% 		\hline
-% 		\textbf{Formato do papel} & A4.                                                                                                                                                                                                                                                                                                                                                                                                                                 \\ \hline
-% 		\textbf{Impressão}        & A norma recomenda que caso seja necessário imprimir, deve-se utilizar a frente e o verso da página.                                                                                                                                                                                                                                                                                                                                 \\ \hline
-% 		\textbf{Margens}          & Superior: 3, Inferior: 2, Interna: 3 e Externa: 2. Usar margens espelhadas quando o  trabalho for impresso.                                                                                                                                                                                                                                                                                                                         \\ \hline
-% 		\textbf{Paginação}        & As páginas dos elementos pré-textuais devem ser contadas, mas não numeradas. Para trabalhos digitados somente no anverso, a numeração das páginas deve constar no canto superior direito da página, a 2 cm da borda, figurando a partir da primeira folha da  parte textual. Para trabalhos digitados no anverso e no verso, a numeração deve constar no canto superior direito, no anverso, e no canto superior esquerdo no verso. \\ \hline
-% 		\textbf{Espaçamento}      & O texto deve ser redigido com espaçamento entre linhas 1,5, excetuando-se as citações de mais de três linhas, notas de rodapé, referências, legendas das ilustrações e das tabelas, natureza (tipo do trabalho, objetivo, nome da instituição a que é submetido e área de concentração), que devem ser digitados em espaço simples, com fonte menor. As referências devem ser separadas entre si por um espaço simples em branco.   \\ \hline
-% 		\textbf{Paginação}        & A contagem inicia na folha de rosto, mas se insere o número da página na introdução até o final do trabalho.                                                                                                                                                                                                                                                                                                                        \\ \hline
-% 		\textbf{Fontes sugeridas} & Arial ou Times New Roman.                                                                                                                                                                                                                                                                                                                                                                                                           \\ \hline
-% 		\textbf{Tamanho da fonte} & \textbf{Fonte tamanho 12 para o texto}, incluindo os títulos das seções e subseções. As citações com mais de três linhas, notas de rodapé, paginação, dados internacionais de catalogação, legendas e fontes das ilustrações e das tabelas devem ser de tamanho menor. Adotamos, neste \textit{template} \textbf{fonte tamanho 10}.                                                                                                 \\ \hline
-% 		\textbf{Nota de rodapé}   & Devem ser digitadas dentro da margem, ficando separadas por um espaço simples por entre as linhas e por filete de 5 cm a partir da margem esquerda. A partir da segunda linha, devem ser alinhadas embaixo da primeira letra da primeira palavra da primeira linha.                                                                                                                                                                 \\ \hline
-% 	\end{tabular}
-% 	\fonte{\textcite{NBR14724:2011}.}
-% \end{quadro}
-
-% % ----------------------------------------------------------
-% \subsubsection{As ilustrações}
-% % ----------------------------------------------------------
-
-% Independentemente do tipo de ilustração (quadro, desenho, figura, fotografia, mapa, entre outros), a sua identificação aparece na parte superior, precedida da palavra designativa.
-
-% \begin{citacao}
-% 	Após a ilustração, na parte inferior, indicar a fonte consultada (elemento obrigatório, mesmo que seja produção do próprio autor), legenda, notas e outras informações necessárias à sua compreensão (se houver). A ilustração deve ser citada no texto e inserida o mais próximo possível do texto a que se refere. \cite[p. 11]{NBR14724:2011}.
-% \end{citacao}
-
-% % ----------------------------------------------------------
-% \subsubsection{Equações e fórmulas}
-% % ----------------------------------------------------------
-
-% As equações e fórmulas devem ser destacadas no texto para facilitar a leitura.  Para numerá-las, usar algarismos arábicos entre parênteses e alinhados à direita. Pode-se adotar uma entrelinha maior do que a usada no texto \cite{NBR14724:2011}.
-
-% Exemplos, \autoref{eq:Eq_1} e \autoref{eq:Eq_2}.
-
-% \begin{equation}\label{eq:Eq_1}
-% 	\gls{C} = 2 \gls{pi} \gls{r}
-% \end{equation}
-
-% \begin{equation}\label{eq:Eq_2}
-% 	\gls{A} = \gls{pi} \gls{r}^2
-% \end{equation}
 % ----------------------------------------------------------
-\section{Arvore de Segmentos}
-% ----------------------------------------------------------
-
-% De acordo com \textcite{ibge1993}, tabela é uma forma não discursiva de apresentar informações em que os números representam a informação central. Ver \autoref{tab:Tab_1}.
-
-% \begin{table}[htb]
-% 	\ABNTEXfontereduzida
-% 	\caption{\label{tab:Tab_1}Médias concentrações urbanas 2010-2011.}
-% 	\begin{tabular}{@{}p{3.0cm}p{1.5cm}p{2cm}p{2.5cm}p{2.5cm}p{2.5cm}@{}}
-% 		\toprule
-% 		\textbf{Média concentração urbana} & \multicolumn{2}{l}{\textbf{População}} & \textbf{Produto Interno Bruto – PIB (bilhões R\$)} & \textbf{Número de empresas} & \textbf{Número de unidades locais}         \\ \midrule
-% 		\textbf{Nome}                      & \textbf{Total}                         & \textbf{No Brasil}                                 &                             &                                    &       \\
-% 		Ji-Paraná (RO)                     & 116 610                                & 116 610                                            & 1,686                       & 2 734                              & 3 082 \\
-% 		Parintins (AM)                     & 102 033                                & 102 033                                            & 0,675                       & 634                                & 683   \\
-% 		Boa Vista (RR)                     & 298 215                                & 298 215                                            & 4,823                       & 4 852                              & 5 187 \\
-% 		Bragança (PA)                      & 113 227                                & 113 227                                            & 0,452                       & 654                                & 686   \\ \bottomrule
-% 	\end{tabular}
-% 	\fonte{\textcite{ibge2016}.}
-% \end{table}

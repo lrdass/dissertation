@@ -21,4 +21,7 @@
     "languageToolLinter.languageTool.language": "pt-BR",
     "ltex.additionalRules.motherTongue": "pt-BR",
     "ltex.language": "pt-BR",
+    "editor.rulers": [
+        100
+    ],
 }
