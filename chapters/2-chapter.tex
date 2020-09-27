@@ -290,7 +290,7 @@ $ $ e $$
                 child{ node[rectangle]{(-11,-7)}}
                 child{ node[rectangle]{(-8,-1)}}
             }
-            child { node[rectangle]{(-5,5)}}
+            child { node[rectangle]{(-5,-5)}}
         }
         child [missing]
         child { node {-13}
@@ -319,9 +319,23 @@ $ $ e $$
 \end{tikzpicture}
 
 
+Para realizarmos uma busca na árvore construída, com uma consulta $ -7 \leq x < 3$ e $-7 \leq y < 3$.
+Iniciamos no nó $5$. Como o nó não é folha, checamos se a área do filho à esquerda esta dentro da consulta.
+O $nó_{-1}$ tem área $ -\infty \leq x < -5$ e  $ -\infty \leq y < \infty$, logo a área não está contida 
+na consulta.
+
+A área dos nós $nó_2$ e $nó_{-1}$ intersectam a consulta, então procedemos chamando
+\Call{BuscaEmArvore}{$nó_{-1}$, consulta} e \Call{BuscaEmArvore}{$nó_{2}$, consulta}.
+
+Ao chegar no $nó_{-8}$, o $filho_{direita}$ é folha e está dentro da consulta e é retornado. 
+E a área de $nó_{-7}$ tem a forma $-\infty \leq x < -8$, logo não intersecta a consulta. E portanto, 
+não há mais descida nos nós filhos de $nó_{-8}$.
+
+Quando chega no $nó_{-6}$, o $filho_{esquerda}$ é nó folha e não está na consulta, e o $filho_{direita}$
+$(-2,2)$ está, e é retornado.
 
 
-\section{Resultados}
+\subsection{Resultados}
 \begin{figure}[htb]
     \caption{\label{fig:Fig_5} — Resultados de busca com Arvore2D}
     \begin{center}
@@ -329,11 +343,30 @@ $ $ e $$
     \end{center}
 \end{figure}
 
-Sendo facilmente verificável apenas constatando que os valores $x$:
-\[ x \leq 50 \textrm{ e } x > -50 \]
-\[ y \leq 10 \textrm{ e } y > -10 \]
 
-\section{Arvore de Intervalos}
+\section{Arvore de Alcance}
 % ----------------------------------------------------------
+
+Uma árvore de alcance é uma árvore binária para buscas $n$-dimensional que possui demais árvores aninhadas
+nas $n$-dimensões.
+Cada nó não-folha é um valor $v$ em uma dimensão $d$, associado ã uma segunda arvore indexada pelo o 
+eixo $d_2$.
+
+Sendo a consulta $n$-dimensional uma junção de $n$-consultas unidimensional.
+
+Uma árvore de alcance $2-dimensional$ é uma árvore indexada inicialmente pelo eixo $x$, e para cada
+nó não-folha, associa-se uma árvore binária indexada pelo eixo $y$.
+
+A consulta consiste em encontrar o nó $v$ menor ancestral comum dos pontos da consulta, e quando encontrar este
+ponto, para os $filhos_{esquerda}$ deste $v$, retorna todos os $pontos_{direita}$. E para os $filhos_{direita}$
+de $v$ retorna todos os pontos à esquerda.
+
+\begin{figure}[htb]
+    \caption{\label{fig:Fig_6} — Arvore de Alcance 2D}
+    \begin{center}
+        \includegraphics{images/range_tree.pdf}
+    \end{center}
+\end{figure}
+
 
 % ----------------------------------------------------------
