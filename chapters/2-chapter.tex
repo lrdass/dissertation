@@ -12,11 +12,11 @@ consultar pontos dentro de uma janela.
 Uma árvore KD é uma árvore binária onde cada folha é um ponto \textit{k-dimensional}.
 Cada nó não-folha guarda um valor $v$ em uma dimensão $d$.
 Pontos cujo os valores na dimensão $d$ são iguais ou menores a $v$ estão na subárvore à esquerda de $v$,
-e respectivamente, pontos maiores que $v$ com valores na dimensão $v$ estão para o lado direito.
+e respectivamente, pontos maiores que $v$ com valores na dimensão $v$ estão na subárvore à direita.
 Cada nível da árvore é associado a uma das \textit{k dimensões}. Então, a citar um exemplo no plano, se dado nó
  divide o eixo
 $x$, a subárvore à esquerda contém os pontos com o eixo $x$ menor que o valor $v$. Similarmente,
- ã direita contém os pontos com o eixo $x$ maior que o valor $v$. 
+ ã direita contém os pontos com o eixo $x$ maior que o valor $v$.
 
 \subsection{Árvore 2D}
 Uma árvore 2D é a versão com duas dimensões para árvores KD. A sua construção considera um conjunto 
@@ -28,8 +28,8 @@ realizamos uma $x$-ordenação e uma $y$-ordenação nos pontos de $P$ (no caso 
 $n$-ordenações). Chamaremos o conjunto de pontos ordenados pelo eixo $x$ de $P_{ordenado(x)}$, e ordenados por $y$ de 
 $P_{ordenado(y)}$.
 
-O \cite{cg08} valor da mediana dos pontos ordenados pelo eixo será o valor de corte do conjunto $P$,
-e serão criados dois subconjuntos.
+O valor da mediana dos pontos ordenados pelo eixo será o valor de corte do conjunto $P$,
+e serão criados dois subconjuntos.\cite{cg08} 
 Chama-se recursivamente a construção das subárvores à esquerda e à direita de $v$ alternando o eixo 
 e passando os subconjuntos. Considere o seguinte conjunto de pontos.
 
@@ -248,7 +248,7 @@ devolvê-lo.
 \end{tikzpicture}
 
 Segue o algoritmo que recebe como parâmetros a raiz da arvore2D e o retângulo de consulta \(R\).
-Usamos uma chamada \(RetornaSubárvore(v)\) que atravessa a árvore do nó \(v\) e retorna
+Usamos uma chamada \Call{RetornaSubárvore}{$v$} que atravessa a árvore do nó \(v\) e retorna
 todos os pontos nas suas folhas. Segue como notação \(filho_{esquerda}(v)\) sendo o filho da esquerda e
 \(filho_{direita}(v)\) o filho da direita do nó \(v\).
 
@@ -283,7 +283,7 @@ todos os pontos nas suas folhas. Segue como notação \(filho_{esquerda}(v)\) se
 
 \subsection{Construindo uma Árvore 2D}
 Sejam os pontos da Figura 3, os pontos, segue a construção da árvore.
-Fazemos uma $x$-ordenação pelos pontos e obtemos a seguinte ordenação:
+Temos $P_{ordenado(x)}$:
 \[
     (-13,8), (-11,-7), (-8,6), (-8,-1), (-5,5), (-2, 2), (2,7), (4,-6),(6,5),(8,-3)
 \]
@@ -320,6 +320,8 @@ $ -13 \leq x \leq 8 $ e $ -7 \leq y \leq 8$.
 
 E agora repete-se o procedimento para os subconjuntos $P_1$ e $P_2$.
 Para os pontos de $P_1$, como a profundidade é ímpar, agora faz-se uma $y$-ordenação e calcula-se a mediana:
+Fazemos uma $x$-ordenação pelos pontos e obtemos a seguinte ordenação:
+$P_{1 ordenado(x)}$
 \[
     (-11,7), (-5,-5), (-8,-1), (-8,6), (-13,8)
 \]
@@ -354,6 +356,32 @@ Calcularemos a área do $nó_{-1}$
 Repete-se recursivamente o procedimento até o conjunto $P$ na chamada \Call{ConstroiArvore2D}{$P$, $prof$}
 contiver somente um ponto. Cria-se então um nó folha, contendo como valor o ponto $p$.
 
+\begin{tikzpicture}[x=0.5cm,y=0.5cm]
+%   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
+  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
+  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
+  \draw[red] (-5,12)--(-5,-12); % y axis
+  \draw[green] (-15,-1)--(-5,-1); % y axis
+  \draw[green] (15,2)--(-5,2); % y axis
+  \draw[blue] (-8,-1)--(-8,-12); % y axis
+  \draw[blue] (-13,-1)--(-13,12); % y axis
+  \draw[blue] (4,2)--(4,-12); % y axis
+  \draw[blue] (2,2)--(2,12); % y axis
+  
+  \draw[orange] (-15,-7)--(-8,-7); % y axis
+  \draw[orange] (4,-6)--(15,-6); % y axis
+  
+  \fill (-13,8)  circle[radius=2pt]node[anchor=north east]{(-13)};
+  \fill (-8,6)  circle[radius=2pt] node[anchor=north east]{(-8)};
+  \fill (-2,2)  circle[radius=2pt] node[anchor=north east]{(2)};
+  \fill (-8,-1)  circle[radius=2pt] node[anchor=north east]{(-1)};
+  \fill (-11, -7)  circle[radius=2pt];
+  \fill (-5,-5)  circle[radius=2pt] node[anchor=north east]{(-5)} ;
+  \fill (2,7)  circle[radius=2pt] ;
+  \fill (6,5)  circle[radius=2pt] ;
+  \fill (8,-3)  circle[radius=2pt];
+  \fill (4,-6)  circle[radius=2pt] node[anchor=north east]{(4)};
+\end{tikzpicture}
 
 Para realizarmos uma busca na árvore construída, com uma consulta $ -3 \leq x \leq 9 $ e $-7 \leq y < 3$.
 Iniciamos no nó $-5$. Como o nó não é folha, checamos se a área do filho à esquerda esta dentro da consulta.
