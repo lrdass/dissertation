@@ -370,14 +370,12 @@ pontos dentro de uma janela foram retornados.
 
 
 % ----------------------------------------------------------
-\section{Arvore de Alcance}
+\section{Árvore de Alcance}
 % ----------------------------------------------------------
 
-
-
-A consulta consiste em encontrar o nó $v$ menor ancestral comum dos pontos da consulta, e quando encontrar este
-ponto, para os $filhos_{esquerda}$ deste $v$, retorna todos os $pontos_{direita}$. E para os $filhos_{direita}$
-de $v$ retorna todos os pontos à esquerda.
+Uma árvore de alcance é  uma árvore binária onde cada nó não folha é um ponto $k$-dimensional
+onde guarda um valor $v$ em uma dimensão $d$ e uma árvore binária auxiliar \tau. Para cada $k$-dimensão
+existirá uma árvore auxiliar \tau  para cada dimensão.
 
 \begin{figure}[htb]
     \caption{\label{fig:Fig_26} — Arvore de Alcance 2D}
@@ -387,13 +385,14 @@ de $v$ retorna todos os pontos à esquerda.
 \end{figure}
 
 \subsection{Árvore de Alcance 2D}
+
 Uma árvore de alcance 2D é uma versão de duas dimensões para a árvores de alcance. A construção considera
 um dado conjunto de pontos $P$ e constrói-se da seguinte forma.
 Temos os pontos da forma $p = (p_x, p_y)$. Ao iniciar a construção, fixamos o eixo $x$.
-Construímos uma árvore binária balanceada considerando os valores na $x$-coordenada de $P_x$. Para cada nó da
-árvore, construímos uma árvore binária auxiliar considerando os valores dos pontos de $P_y$ pelos valores 
-da $y$-coordenada e associamos esta árvore resultante ao nó respectivo.
-Por fim, os pontos serão guardados nos nós folhas de ambas as árvores.
+Construímos uma árvore binária balanceada considerando os valores na $x$-coordenada. Para cada nó não
+folha $v$ construiremos uma árvore auxiliar \tau com todos os pontos alcançáveis a partir de $v$. Esta
+árvore será construiída considerando os valores da $y$-coordenada. Associamos \tau ao nó $v$.
+Todo nó folha guarda o valor do ponto.
 
 Considere o seguinte conjunto de pontos.
 \begin{figure}[H]
@@ -423,13 +422,13 @@ Considere o seguinte conjunto de pontos.
 % imagem
 
 % arvore [(15,3),(-4, 5),(2,2),(-2,-2),(3,1),(0,0),(4,-2),(3,3),(1,1),(1,2)]
-Para construir uma árvore binária balanceada realizamos uma é necessário que os pontos estejam ordenados.
-Ordenamos os pontos $P$ pela $x$-coordenada inicialmente. Escolhemos o ponto médio $x_{mediana}$ e
-criamos dois subconjuntos $P_1$ e $P_2$ tal que:
+Para construir uma árvore binária balanceada é necessário que os pontos estejam ordenados.
+Ordenamos os pontos $P$ pela $x$-coordenada inicialmente. Escolhemos o ponto médio $x_{mediana}$ guardamos
+em $v$ e criamos dois subconjuntos $P_1$ e $P_2$ tal que:
 
     $P_1 = \{p \in P : p_x \leq x_{mediana}\}$ e $P_2 = \{p \in P : p_x > x_{mediana}\}$.
-Associamos ao nó uma segunda árvore binária balanceada que construiremos com os pontos de $P$ 
-considerando o valor da $y$-coordenada.
+
+Criaremos uma árvore binária balanceada \tau $P$  considerando o valor da $y$-coordenada.
 A árvore associada correspondente e o pseudocódigo sao dados em seguida.
 
 
