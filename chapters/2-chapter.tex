@@ -373,15 +373,7 @@ pontos dentro de uma janela foram retornados.
 \section{Arvore de Alcance}
 % ----------------------------------------------------------
 
-Uma árvore de alcance é uma árvore binária para buscas $n$-dimensional que possui demais árvores aninhadas
-nas $n$-dimensões.
-Cada nó não-folha é um valor $v$ em uma dimensão $d$, associado à uma segunda árvore indexada pelo o 
-eixo $d_2$.
 
-Sendo a consulta $n$-dimensional uma junção de $n$-consultas unidimensional.
-
-Uma árvore de alcance $2-dimensional$ é uma árvore indexada inicialmente pelo eixo $x$, e para cada
-nó não-folha, associa-se uma árvore binária indexada pelo eixo $y$.
 
 A consulta consiste em encontrar o nó $v$ menor ancestral comum dos pontos da consulta, e quando encontrar este
 ponto, para os $filhos_{esquerda}$ deste $v$, retorna todos os $pontos_{direita}$. E para os $filhos_{direita}$

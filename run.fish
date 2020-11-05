@@ -1,0 +1,1 @@
+docker run -v $PWD:/data  blang/latex:ctanfull  latexmk thesis -pdf -output-directory=(pwd)/dist/ -jobname=thesis -interaction=nonstopmode
