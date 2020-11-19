@@ -25,12 +25,14 @@ Ao iniciar a construção, realizamos uma $x$-ordenação e uma $y$-ordenação 
 (no caso $n$ dimensional, faremos $n$-ordenações). Chamaremos o conjunto de pontos ordenados pelo eixo
 $x$ de $P_{ord(x)}$, e ordenados por $y$ de $P_{ord(y)}$.
 
+A seguir, apresentamos uma forma de construir uma árvore 2D\cite{cg08}.
 Fixado um eixo, o valor da mediana dos pontos ordenados neste eixo será o valor $v$ escolhido para dividir
 $P$ em dois subconjuntos, e serão criados dois subconjuntos. Chama-se recursivamente a
 construção das subárvores à esquerda e à direita de $v$ alternando o eixo e passando os subconjuntos.
 Considere o seguinte conjunto de pontos.
-
-\begin{tikzpicture}[scale=0.33]
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=0.33]
   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
   \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
   \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
@@ -47,6 +49,10 @@ Considere o seguinte conjunto de pontos.
   \fill (8,-3)  circle[radius=5pt] node[anchor=north east]{(8,-3)};
   \fill (4,-6)  circle[radius=5pt] node[anchor=north east]{(4,-6)};
 \end{tikzpicture}
+    \caption{Plano com os pontos $P$}
+    \label{fig:my_label}
+\end{figure}
+
 
 
 Inicialmente escolhemos o eixo $x$. Acompanharemos a troca de eixos de acordo com o nível da árvore.
@@ -58,12 +64,122 @@ Criamos dois subconjuntos $P_1$ e $P_2$ tal que:
 
 Agora, recursivamente, repete-se para os dois novos conjuntos criados considerando o eixo $y$ e 
 continua da mesma forma até restar somente um ponto. Este, por sua vez, será um nó folha da árvore e
-tratado na base da recursão do algoritmo. A árvore 2D correspondente à figura anterior e o pseudocódigo
+tratado na base da recursão do algoritmo.
+
+Sejam os pontos da Figura 3, os pontos, segue a construção da árvore.
+Temos $P_{ord(x)}$ = $(-13,8), (-11,-7), (-8,6), (-8,-1), (-5,5), (-2, 2), (2,7), (4,-6),(6,5),(8,-3)$.
+
+Criamos um nó raiz com e armazenamos nela o valor $-5$, dividimos o conjunto de pontos em dois subconjuntos: $P_1$ 
+com os pontos com $x \leq -5$ e $P_2$ com os pontos $x > -5$.
+Criamos dois nós: $v_{esquerda}$ e $v_{direita}$, e associamos os conjuntos $P_1$ e $P_2$ nas chamadas
+recursivas.
+
+A região do nó raiz é calculada como: 
+$ -13 \leq x \leq 8 $ e $ -7 \leq y \leq 8$. 
+
+\begin{figure}
+    \caption{A linha vermelha é o corte no eixo $x$}
+ \centering
+  \begin{tikzpicture}[x=0.25cm,y=0.25cm]
+%   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
+  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
+  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
+
+\draw[red] (-5,12)--(-5,-12); % y axis
+
+  \fill (-13,8)  circle[radius=2pt] ;
+  \fill (-8,6)  circle[radius=2pt] ;
+  \fill (-2,2)  circle[radius=2pt] ;
+  \fill (-8,-1)  circle[radius=2pt];
+  \fill (-11, -7)  circle[radius=2pt];
+  \fill (-5,-5)  circle[radius=2pt] node[anchor=north east]{(-5)};
+  \fill (2,7)  circle[radius=2pt] ;
+  \fill (6,5)  circle[radius=2pt] ;
+  \fill (8,-3)  circle[radius=2pt];
+  \fill (4,-6)  circle[radius=2pt];
+\end{tikzpicture}
+  
+\end{figure}
+
+E agora repete-se o procedimento para os subconjuntos $P_1$ e $P_2$.
+Para os pontos de $P_1$, como a profundidade é ímpar, agora considera uma $y$-ordenação e calcula-se a mediana:
+Fazemos uma $y$-ordenação pelos pontos e obtemos a seguinte ordenação:
+$P_{1 ord(y)}$ = \{ $ (-11,7), (-5,-5), (-8,-1), (-8,6), (-13,8)$\}.
+
+Temos que a mediana é $-1$, criamos um nó e armazenamos nele o valor $-1$. Dividimos o conjunto de 
+pontos em $P_1 = \{ (-11,7), (-5,-5), (-8,-1)\} $ e $P_2 = \{(-8,6), (-13,8) \}$.
+
+Sabemos que o eixo foi cortado em $-5$ em $x$.
+Calculamos a região do $nó_{-1}$ que conterá os pontos $(x,y)$ tal que: $-11 \leq x < -5 \textmd{; e } -5 \leq y < 8$.
+ 
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[x=0.25cm,y=0.25cm]
+%   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
+  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
+  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
+  \draw[red] (-5,12)--(-5,-12); % y axis
+  \draw[green] (-15,-1)--(-5,-1); % y axis
+  \fill (-13,8)  circle[radius=2pt] ;
+  \fill (-8,6)  circle[radius=2pt] ;
+  \fill (-2,2)  circle[radius=2pt] ;
+  \fill (-8,-1)  circle[radius=2pt] node[anchor=north east]{(-1)};
+  \fill (-11, -7)  circle[radius=2pt];
+  \fill (-5,-5)  circle[radius=2pt] ;
+  \fill (2,7)  circle[radius=2pt] ;
+  \fill (6,5)  circle[radius=2pt] ;
+  \fill (8,-3)  circle[radius=2pt];
+  \fill (4,-6)  circle[radius=2pt];
+\end{tikzpicture}
+    \caption{A linha verde é o corte no eixo $y$ que divide em relação ao ponto $(-8, -1)$ }
+    \label{fig:my_label}
+\end{figure}
+
+
+Repete-se recursivamente o procedimento até o conjunto $P$ na chamada \Call{ConstróiÁrvore2D}{$P$, $prof$}
+contiver somente um ponto. Cria-se então um nó folha, contendo como valor o ponto $p$. A figura a seguir é a representação dos pontos no plano com os eixos de corte para a construção da 
+árvore 2D.
+
+\begin{figure}
+    \centering
+   \begin{tikzpicture}[x=0.5cm,y=0.5cm]
+%   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
+  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
+  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
+  \draw[gray] (-5,12)--(-5,-12); % y axis
+  \draw[gray] (-15,-1)--(-5,-1); % y axis
+  \draw[gray] (15,2)--(-5,2); % y axis
+  \draw[gray] (-8,-1)--(-8,-12); % y axis
+  \draw[gray] (-13,-1)--(-13,12); % y axis
+  \draw[gray] (4,2)--(4,-12); % y axis
+  \draw[gray] (2,2)--(2,12); % y axis
+  
+  \draw[gray] (-15,-7)--(-8,-7); % y axis
+  \draw[gray] (4,-6)--(15,-6); % y axis
+  
+  \fill (-13,8)  circle[radius=2pt]node[anchor=north east]{(-13)};
+  \fill (-8,6)  circle[radius=2pt] ;
+  \fill (-2,2)  circle[radius=2pt] node[anchor=north east]{(2)};
+  \fill (-8,-1)  circle[radius=2pt] node[anchor=north east]{(-8)};
+  \fill (-11, -7)  circle[radius=2pt];
+  \fill (-5,-5)  circle[radius=2pt] node[anchor=north east]{(-5)} ;
+  \fill (2,7)  circle[radius=2pt] ;
+  \fill (6,5)  circle[radius=2pt] ;
+  \fill (8,-3)  circle[radius=2pt];
+  \fill (4,-6)  circle[radius=2pt] node[anchor=north east]{(4)};
+\end{tikzpicture}
+    \caption{Plano $P$ com a subdivisão dos pontos e as linhas cinza são os cortes dos nós da árvore 2D}
+    \label{fig:my_label}
+\end{figure}
+
+
+
+ A árvore 2D correspondente à figura anterior e o pseudocódigo
 para a construção de uma árvore 2D são dados em seguida.
 
 
 \begin{algorithm}
-    \caption{O algorítimo \Call{ConstroiArvore2D}{$P$, $profundidade=0$}, recebe um conjunto de 
+    \caption{O algoritimo \Call{ConstróiArvore2D}{$P$, $profundidade=0$}, recebe um conjunto de 
     pontos $P$ no plano e uma profundidade da árvore.
     O algoritmo devolve a raiz de uma árvore 2D.}
     \begin{algorithmic}[1]
@@ -92,7 +208,9 @@ para a construção de uma árvore 2D são dados em seguida.
     \end{algorithmic}
 \end{algorithm}
 
-\begin{tikzpicture}[nodes={draw, circle}, ->]
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[nodes={draw, circle}, ->]
     % Tree structure
  \node{-5}
     child { node {-1} 
@@ -128,114 +246,9 @@ para a construção de uma árvore 2D são dados em seguida.
         }
     };
 \end{tikzpicture}
-
-
-\clearpage
-
-Sejam os pontos da Figura 3, os pontos, segue a construção da árvore.
-Temos $P_{ord(x)}$ = $(-13,8), (-11,-7), (-8,6), (-8,-1), (-5,5), (-2, 2), (2,7), (4,-6),(6,5),(8,-3)$.
-
-Criamos um nó raiz com o valor $-5$, dividimos o conjunto de pontos em dois subconjuntos: $P_1$ 
-com os pontos com $x \leq -5$ e $P_2$ com os pontos $x > -5$.
-Criamos dois nós: $v_{esquerda}$ e $v_{direita}$, e associamos os conjuntos $P_1$ e $P_2$ nas chamadas
-recursivas.
-
-A área do nó raiz é calculada como: 
-$ -13 \leq x \leq 8 $ e $ -7 \leq y \leq 8$. 
-
-\begin{figure}[H]
-    \caption{\label{fig:Fig_5} — Seja}
- \begin{center}
-  \begin{tikzpicture}[x=0.25cm,y=0.25cm]
-%   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
-  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
-  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
-
-\draw[red] (-5,12)--(-5,-12); % y axis
-
-  \fill (-13,8)  circle[radius=2pt] ;
-  \fill (-8,6)  circle[radius=2pt] ;
-  \fill (-2,2)  circle[radius=2pt] ;
-  \fill (-8,-1)  circle[radius=2pt];
-  \fill (-11, -7)  circle[radius=2pt];
-  \fill (-5,-5)  circle[radius=2pt] node[anchor=north east]{(-5)};
-  \fill (2,7)  circle[radius=2pt] ;
-  \fill (6,5)  circle[radius=2pt] ;
-  \fill (8,-3)  circle[radius=2pt];
-  \fill (4,-6)  circle[radius=2pt];
-\end{tikzpicture}
-     
- \end{center}
-  
+    \caption{Árvore 2D construída. O $nó_{4}$ indica a área da Figura 6}
+    \label{fig:my_label}
 \end{figure}
-
-E agora repete-se o procedimento para os subconjuntos $P_1$ e $P_2$.
-Para os pontos de $P_1$, como a profundidade é ímpar, agora considera uma $y$-ordenação e calcula-se a mediana:
-Fazemos uma $y$-ordenação pelos pontos e obtemos a seguinte ordenação:
-$P_{1 ordenado(y)}$
-\[
-    (-11,7), (-5,-5), (-8,-1), (-8,6), (-13,8)
-\]
-
-Temos que a mediana é $-1$ cria-se nó com o valor $-1$. Dividimos o conjunto de 
-pontos em $P_1 \leftarrow (-11,7), (-5,-5), (-8,-1) $ e $P_2 \leftarrow (-8,6), (-13,8)$.
-
-Sabemos que o eixo foi cortado em $-5$ em $x$.
-Calcularemos a área do $nó_{-1}$
-\[
-    -11 \leq x < -5 \textmd{; e } -5 \leq y < 8
-\] 
-
-\begin{tikzpicture}[x=0.25cm,y=0.25cm]
-%   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
-  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
-  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
-  \draw[red] (-5,12)--(-5,-12); % y axis
-  \draw[green] (-15,-1)--(-5,-1); % y axis
-  \fill (-13,8)  circle[radius=2pt] ;
-  \fill (-8,6)  circle[radius=2pt] ;
-  \fill (-2,2)  circle[radius=2pt] ;
-  \fill (-8,-1)  circle[radius=2pt] node[anchor=north east]{(-1)};
-  \fill (-11, -7)  circle[radius=2pt];
-  \fill (-5,-5)  circle[radius=2pt] ;
-  \fill (2,7)  circle[radius=2pt] ;
-  \fill (6,5)  circle[radius=2pt] ;
-  \fill (8,-3)  circle[radius=2pt];
-  \fill (4,-6)  circle[radius=2pt];
-\end{tikzpicture}
-
-Repete-se recursivamente o procedimento até o conjunto $P$ na chamada \Call{ConstróiÁrvore2D}{$P$, $prof$}
-contiver somente um ponto. Cria-se então um nó folha, contendo como valor o ponto $p$.
-
-A figura a seguir é a representação dos pontos no plano com os eixos de corte para a construção da 
-árvore 2D.
-
-\begin{tikzpicture}[x=0.5cm,y=0.5cm]
-%   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
-  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
-  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
-  \draw[gray] (-5,12)--(-5,-12); % y axis
-  \draw[gray] (-15,-1)--(-5,-1); % y axis
-  \draw[gray] (15,2)--(-5,2); % y axis
-  \draw[gray] (-8,-1)--(-8,-12); % y axis
-  \draw[gray] (-13,-1)--(-13,12); % y axis
-  \draw[gray] (4,2)--(4,-12); % y axis
-  \draw[gray] (2,2)--(2,12); % y axis
-  
-  \draw[gray] (-15,-7)--(-8,-7); % y axis
-  \draw[gray] (4,-6)--(15,-6); % y axis
-  
-  \fill (-13,8)  circle[radius=2pt]node[anchor=north east]{(-13)};
-  \fill (-8,6)  circle[radius=2pt] ;
-  \fill (-2,2)  circle[radius=2pt] node[anchor=north east]{(2)};
-  \fill (-8,-1)  circle[radius=2pt] node[anchor=north east]{(-8)};
-  \fill (-11, -7)  circle[radius=2pt];
-  \fill (-5,-5)  circle[radius=2pt] node[anchor=north east]{(-5)} ;
-  \fill (2,7)  circle[radius=2pt] ;
-  \fill (6,5)  circle[radius=2pt] ;
-  \fill (8,-3)  circle[radius=2pt];
-  \fill (4,-6)  circle[radius=2pt] node[anchor=north east]{(4)};
-\end{tikzpicture}
 
 
 \clearpage
@@ -244,20 +257,12 @@ A figura a seguir é a representação dos pontos no plano com os eixos de corte
 \subsection{Consulta}
 Uma consulta 2-dimensional em $P$ é uma busca de quais pontos de $P$ estão entre um retângulo de consulta
 \([x,x']  \times  [y,y']\) que chamaremos de janela. Um ponto $p:= (p_x, p_y)$ está dentro de um
-retângulo de busca se e somente se: $p_x \in [x, x'] \textrm{ e } p_y \in [y, y']$.
+retângulo de busca se $p_x \in [x, x'] \textrm{ e } p_y \in [y, y']$.
 
 Podemos dizer que uma consulta 2-dimensional é composta de duas sub-consultas 1-dimensional: uma no
-eixo \(x\) de um dos pontos e uma consulta no eixo \(y\).
+eixo \(x\) e uma consulta no eixo \(y\).
 
-\begin{figure}[htb]
-    \caption{\label{fig:Fig_2} - Consulta 2D}
-    \begin{center}
-        \includegraphics{images/search_range.png}
-    \end{center}
-\end{figure}
-
-
-Denotaremos esta área de um nó \(v\) como \(região(v)\). Portanto, o algoritmo buscará pela subárvore
+Denotaremos uma região de um nó \(v\) como \(região(v)\). Portanto, o algoritmo buscará pela subárvore
 com raiz \(v\) somente se o retângulo de busca intersectar a \(região(v)\).
 
 Seja $P_v$ o conjunto de pontos em folhas alcançáveis a partir de $v$.
@@ -269,10 +274,10 @@ Então, a $região(v)$, que é um retângulo no plano, pode ser definida atravé
  }
 \]
 
-Por exemplo, na figura da árvore 2D anterior, a área do $nó_4$ que guarda o valor 4 
+Por exemplo, na figura da árvore 2D anterior, a região do $nó_4$ que guarda o valor 4 
 \[
 \mbox{
-    área_4 =  \begin{cases} -2 \leq x \leq 8 \\ -6 \leq y \leq 2 \end{cases} 
+    região_4 =  \begin{cases} -2 \leq x \leq 8 \\ -6 \leq y \leq 2 \end{cases} 
 }
 \]
 
@@ -282,39 +287,41 @@ todos os pontos na subárvore enraizada em $v$. No caso em que chegamos em um n�
 que verificar se o nó está dentro da janela, se estiver, devolvê-lo.
 
 \begin{figure}[H]
-    \caption{\label{fig:Fig_3} - Em vermelho a área do $nó_4$ e em verde a área do retângulo de consulta}
+    \caption{Em vermelho a região do nó da árvore anterior com o valor 4 armazenado}
+    \centering
 \begin{tikzpicture}[scale=0.33]
   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
   \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
   \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
 
+\draw[draw=red, line width=2pt] (-2,-6) rectangle (8,2);
+  \draw[draw=blue, line width=2pt] (-3,-7) rectangle (9,3);
 
-  \fill (-13,8)  circle[radius=2pt] node[anchor=north east]{(-13,8)};
-  \fill (-8,6)  circle[radius=2pt] node[anchor=north east]{(-8,6)};
-  \fill (-2,2)  circle[radius=2pt] node[anchor=north east]{(-2,2)};
-  \fill (-8,-1)  circle[radius=2pt] node[anchor=north east]{(-8,-1)};
-  \fill (-11, -7)  circle[radius=2pt] node[anchor=north east]{(-11,-7)};
-  \fill (-5,-5)  circle[radius=2pt] node[anchor=north east]{(-5,-5)};
-  \fill (2,7)  circle[radius=2pt] node[anchor=north east]{(2,7)};
-  \fill (6,5)  circle[radius=2pt] node[anchor=north east]{(6,5)};
-  \fill (8,-3)  circle[radius=2pt] node[anchor=north east]{(8,-3)};
-  \fill (4,-6)  circle[radius=2pt] node[anchor=north east]{(4,-6)};
-  \draw[draw=red] (-2,-6) rectangle (8,2);
-  \draw[draw=green] (-3,-7) rectangle (9,3);
+  \fill (-13,8)  circle[radius=4pt] node[anchor=north east]{(-13,8)};
+  \fill (-8,6)  circle[radius=4pt] node[anchor=north east]{(-8,6)};
+  \fill (-2,2)  circle[radius=4pt] node[anchor=north east]{(-2,2)};
+  \fill (-8,-1)  circle[radius=4pt] node[anchor=north east]{(-8,-1)};
+  \fill (-11, -7)  circle[radius=4pt] node[anchor=north east]{(-11,-7)};
+  \fill (-5,-5)  circle[radius=4pt] node[anchor=north east]{(-5,-5)};
+  \fill (2,7)  circle[radius=4pt] node[anchor=north east]{(2,7)};
+  \fill (6,5)  circle[radius=4pt] node[anchor=north east]{(6,5)};
+  \fill (8,-3)  circle[radius=4pt] node[anchor=north east]{(8,-3)};
+  \fill (4,-6)  circle[radius=4pt] node[anchor=north east]{(4,-6)};
+  
 
 \end{tikzpicture}
 \end{figure}
 
 Segue o algoritmo que recebe como parâmetros a raiz de uma árvore 2D e uma janela R.
-Usamos uma chamada \Call{ReportaSubárvore}{$v$} que atravessa a árvore do nó \(v\) e retorna
-todos os pontos nas suas folhas. Segue como notação \(filho_{esq}(v)\) sendo o filho esquerda e
-\(filho_{dir}(v)\) o filho direita do nó \(v\).
+Usamos uma chamada \Call{ReportaSubárvore}{$v$} que atravessa a árvore do nó \(v\) e devolve
+todos os pontos nas suas folhas. Segue como notação \(filho_{esq}(v)\) sendo o filho à esquerda e
+\(filho_{dir}(v)\) o filho à direita do nó \(v\).
 
 
 \begin{algorithm}[H]
     \caption{A função \Call{ConsultaEmÁrvore2D}{$v$, $R$} recebe como parâmetro um nó e uma 
-    janela.
-     E devolve todos os pontos dentro de R.}
+    janela $R$.
+    Devolve todos os pontos dentro de R.}
     \begin{algorithmic}[1]
     \Function{ConsultaEmÁrvore2D}{$v$, $R$}
         \If{v é folha}
@@ -340,27 +347,26 @@ todos os pontos nas suas folhas. Segue como notação \(filho_{esq}(v)\) sendo o
 \end{algorithm}
 
 Para realizarmos uma busca na árvore construída, com uma consulta $ -3 \leq x \leq 9 $ e $-7 \leq y < 3$.
-Iniciamos no nó $-5$. Como o nó não é folha, checamos se a área do filho à esquerda esta dentro da consulta.
-O $nó_{-1}$ tem área $ -13 \leq x \leq -5 $ e  $ -7 \leq y \leq 8$, logo a área não está contida 
+Iniciamos no nó $-5$. Como o nó não é folha, checamos se a região do filho à esquerda esta dentro da consulta.
+O $nó_{-1}$ tem região $ -13 \leq x \leq -5 $ e  $ -7 \leq y \leq 8$, logo a região não está contida 
 na consulta.
 
-A área dos nós $nó_2$ e $nó_{-1}$ intersectam a consulta, então procedemos chamando
+A região dos nós $nó_2$ e $nó_{-1}$ intersectam a consulta, então procedemos chamando
 \Call{BuscaEmArvore}{$nó_{-1}$, consulta} e \Call{BuscaEmArvore}{$nó_{2}$, consulta}.
 
-O $nó_{2}$, o $filho_{esquerda}$ é o $nó_4$, que está contido na área da consulta e portanto todos
+O $nó_{2}$, o $filho_{esquerda}$ é o $nó_4$, que está contido na região da consulta e portanto todos
 os pontos folha são retornados.
 
 \subsection{Otimização}
-O algoritmo de construção como descrito realiza $log_n$ ordenações para a construção da árvore.
-Uma otimização para o algoritmo de construção da árvore KD é realizar apenas $d$ ordenações, onde $d$
+A forma como implementamos o algoritmo de construção realiza ordenações em cada chamada.
+Uma otimização para a implementação da construção da árvore KD é realizar apenas $d$ ordenações, onde $d$
 é o número de dimensões da árvore KD.
 Para isto é preciso ordenar os pontos antes do inicio da construção da árvore e durante a troca de eixo
 da árvore, é checar quais pontos no nó pai foram removidos e desconsiderá-los no eixo atual.
 
-A Figura 5 corresponde a uma figura gerada por nossas implementações da árvore 2D. Como esperado, os
-pontos dentro de uma janela foram retornados.
-\begin{figure}[scale=0.5]
-    \caption{\label{fig:Fig_54} — Resultados de busca com Arvore2D}
+A Figura 4 corresponde a uma figura gerada por nossas implementações da árvore 2D. Como esperado, os pontos dentro de uma janela foram retornados.
+\begin{figure}[H]
+    \caption {Resultados de busca com Arvore2D}
     \begin{center}
         \includegraphics{images/points.pdf}
     \end{center}
@@ -375,7 +381,7 @@ pontos dentro de uma janela foram retornados.
 
 Uma árvore de alcance é  uma árvore binária onde cada nó não folha é um ponto $k$-dimensional
 onde guarda um valor $v$ em uma dimensão $d$ e uma árvore binária auxiliar $\tau$. Para cada $k$-dimensão
-existirá uma árvore auxiliar $\tau$ para cada dimensão.
+existirá uma árvore auxiliar $\tau$ para cada dimensão.\cite{dsp_rt1}
 
 \begin{figure}[htb]
     \caption{\label{fig:Fig_26} — Arvore de Alcance 2D}
@@ -396,8 +402,8 @@ $\tau$ ao nó $v$; Os nós folhas por sua vez guardarão os pontos em si.
 
 Considere o seguinte conjunto de pontos.
 \begin{figure}[H]
-
-\begin{tikzpicture}[scale=0.5]
+\centering
+\begin{tikzpicture}[scale=0.33]
   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
   \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
   \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
@@ -505,7 +511,7 @@ construída com os pontos de $P_1$ ordenados pela $y$-coordenada.
   \label{fig:test2}
  
 \end{minipage}
- \caption{$nó_{-6}$ e sua árvore associada}
+ \caption{$nó_{-6}$ e sua $y$-árvore associada}
 \end{figure}
 
 
@@ -514,9 +520,10 @@ Cria-se um nó folha contendo como valor o ponto $p$ em ambas as árvores.
 
 A figura a seguir é a representação dos pontos no plano em uma árvore de alcance.
 \begin{figure}[H]
+
 \begin{tikzpicture}[nodes={draw, circle}, ->]
     % Tree structure
- \node{2}
+ \node{-2}
     child { node {-6} 
         child { node {-7}
             child{ node{-8}
@@ -618,15 +625,15 @@ Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta uni
     janela.
      E devolve o primeiro ponto dentro janela de consulta.}
     \begin{algorithmic}[1]
-    \Function{EncontraNóCorte}{$v$, $R$}
+    \Function{EncontraNóCorte}{$v$, $R:[x, x']$}
         \While{$v$ não é folha}
         \If{$v \in R$ } 
             \Return $v$
         \Else
             \If{$v > R$ }
-                \State $v \leftarrow v_{direita}$ 
+                \State $v \leftarrow v_{esquerda}$ 
             \Else
-                \State $v \leftarrow v_{left}$
+                \State $v \leftarrow v_{direita}$
             \EndIf
         \EndIf
     \EndFunction
@@ -650,7 +657,7 @@ Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta uni
                     \State \Call{ReportaSubárvore}{$v$}
                     \State $v \leftarrow filho_{esq}(v)$
                 \Else
-                    \State $v \leftarrow filho_{esq}(v)$
+                    \State $v \leftarrow filho_{dir}(v)$
                 \EndIf
             \EndWhile
             \If{$v$ é ponto e $v \in R$}
@@ -665,15 +672,13 @@ Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta uni
 \clearpage
 
 
-Sejam os pontos da Figura , os pontos, segue a construção da árvore.
-Temos $P_{ord(x)}$ = $-8, -7, -6, -4, -2, 0, 3, 4, 7, 15$
-Na figura 7 temos a árvore construída em relação a coordenada $x$.
-Iremos fazer uma consulta de intervalo nesta arvore inicialmente.
-Seja o intervalo de consulta $R = [-5, 5] \times [3, -8]$
+Na figura 7 temos a árvore construída em relação a coordenada $y$.
+Iremos fazer uma consulta unidimensional de intervalo nesta árvore inicialmente.
+Seja o intervalo de consulta $R = [-8, 3]$ segue na figura em seguida:
 
 \begin{figure}[H]
 \centering
-    \caption {Em vermelho a área do retângulo de consulta}
+    \caption {Em azul, a consulta unidimensional em $y$ nos pontos em $P$}
 \begin{tikzpicture}[scale=0.33]
   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
   \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
@@ -691,31 +696,49 @@ Seja o intervalo de consulta $R = [-5, 5] \times [3, -8]$
   \fill (-8,8)  circle[radius=3pt] node[anchor=south east]{(-8,8)};
   \fill (4,2)  circle[radius=3pt] node[anchor=north west]{(4,2)};
   
-  \draw[draw=red] (-5,3) rectangle (5,-8);
+  \draw[draw=gray, line width=3pt] (0,3) -- (0,-8);
+  \draw[draw=blue] (-15,3) -- (15,3);
+  \draw[draw=blue] (-15,-8) -- (15,-8);
 
 \end{tikzpicture}
 \end{figure}
 
-% \begin{tikzpicture}[scale=0.5]
-% \draw (-12,0)-- (9,0); %Axis
 
-% \draw (-8,1) -- (2,1);
-% \draw[fill=black] (-8,1) circle (0.25);
-% \fill (2,1) circle (0.25);
-% \end{tikzpicture}
-
-Começamos pelo nó raiz com valor $1$. A condição $-8 \leq 1 \leq 2$ é verdadeira. Portanto $nó_{1}$
+Começamos pelo nó raiz com valor $2$. A condição $-8 \leq 2 \leq 3$ é verdadeira. Portanto $nó_{2}$
 será nosso $nó_{corte}$.
-A partir dele, primeiramente iremos obter os nós $v$ tal que $v \leq 1$. Começamos a busca em profundidade:
-o nó a esquerda de $nó_{1}$ é $no_{0}$. Reportamos a subárvore à direita $nó_{0}$.
-O valor $0$ ainda mantém $-8 \leq 0$, e, portanto, continuamos a busca em profundidade. 
-Agora temos o $nó_{-2}$. Por sua vez, satisfaz  $-2 \leq -8$, reportamos a subárvore à direita. A busca
-em profundidade continuará até o $no_{-4}$, que satisfaz a consulta porém é o ultimo nó não folha. Reportamos
-a subárvore à direita e saímos. Checando se o nó folha $(-4)$ esta dentro da consulta, e está.
-Realizaremos o mesmo procedimento, porem, á partir de $nó_{corte}$ iremos realizar busca em profundidade
-à pela direita considerando se o valor do nó é $nó \leq 2$.
+A partir dele, primeiramente iremos obter os nós $v$ tal que $v \leq 2$. Começamos a busca em profundidade:
+o nó a esquerda de $nó_{2}$ é $no_{-3}$. Reportamos a subárvore à direita $nó_{-3}$ = \{$(-6,2)$\}.
+O valor $-3$ ainda mantém $-8 \leq -3$, e, portanto, continuamos a busca em profundidade.
 
-Por fim teremos os nós $(-4, -2, 0, 1, 1, 2)$.
+Agora temos o $nó_{-7}$. Por sua vez, satisfaz  $-7 \leq -8$, reportamos a subárvore à direita =\{$(-7, -3)$\}.
+A busca em profundidade continuará até o $nó_{raiz}=\{(-2,-7)\}$, que satisfaz a consulta.
+Realizaremos o mesmo procedimento, porem, á partir de $nó_{corte}$ iremos realizar busca em profundidade pela direita considerando se o valor do nó é $nó \leq 3$.
+
+Por fim teremos os pontos: \{$(-2,-7), (-7,-3), (-6,2)$\}
+\begin{figure}[H]
+\centering
+\resizebox{.6\textwidth}{!}{
+\begin{tikzpicture}[nodes={draw, circle}, ->]
+ \node{2}
+    child { node {-3} 
+        child{ node{-7}
+            child{ node[rectangle, fill=gray]{(-2,-7)}}
+            child{ node[rectangle, fill=gray]{(-7,-3)}}
+        }
+        child{ node[rectangle, fill=gray]{(-6,2)}}
+    }
+    child [missing]
+    child [missing]
+    child [missing]
+    child [missing]
+    child { node {5}
+        child{ node[rectangle]{(-4,5)}}
+        child{ node[rectangle]{(-8,8)}}
+    };
+\end{tikzpicture}
+}
+\caption{Pontos na $y$-árvore do $nó_{-6}$}
+\end{figure}
 
 \subsection{Consulta Bidimensional}
 
@@ -737,7 +760,7 @@ Segue pseudocódigo pra consulta bidimensional:
             \State $v \leftarrow $ $filho_{esq}(v_{corte})$
             \While{$v$ não é folha}
                 \If{$x \leq v$}
-                    \State \Call{Busca1DEmAlcance}{$v \rightarrow \tau_{associada}, y,y'$}
+                    \State \Call{Busca1DEmAlcance}{$filho_{dir}(v) \rightarrow \tau_{associada}, y,y'$}
                     \State $v \leftarrow filho_{esq}(v)$
                 \Else
                     \State $v \leftarrow filho_{dir}(v)$
@@ -753,17 +776,83 @@ Segue pseudocódigo pra consulta bidimensional:
 \end{algorithm}
 \clearpage
 
-Iremos agora demonstrar uma consulta bidimensional com intervalos $x : [-8, 2]$ e em $y : [-7, 3]$
-Iniciamos a busca no nó raiz $nó_{1}$. Temos que inicialmente encontrar o $nó_{corte}$ e $nó_{1}$ 
-está dentro da consulta em $[-8, 2]$. 
+
+Iremos agora demonstrar uma consulta bidimensional:
+Seja o intervalo de consulta $R = [-6, 1] \times [-8, 3]$
+Como explicitado, será uma junção de consultas unidimensionais na $x$-árvore com a consulta $[-6,1]$ e uma consulta nas $y$-árvores associadas entre $[3,-8]$
+
+\begin{figure}
+
+    \caption {Em vermelho a região do retângulo de consulta}
+    \centering
+\begin{tikzpicture}[scale=0.33]
+  \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
+  \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
+  \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
+
+
+ \fill (15,3)  circle[radius=3pt] node[anchor=north east]{(15,3)};
+  \fill (-4,5)  circle[radius=3pt] node[anchor=north east]{(-4,5)};
+  \fill (-6,2)  circle[radius=3pt] node[anchor=south west]{(-6,2)};
+  \fill (-2,-7)  circle[radius=3pt] node[anchor=north east]{(-2,-7)};
+  \fill (3,-9)  circle[radius=3pt] node[anchor=north east]{(3,-9)};
+  \fill (0,10)  circle[radius=3pt] node[anchor=north east]{(0,10)};
+  \fill (7,-11)  circle[radius=3pt] node[anchor=north east]{(7,-11)};
+  \fill (-7,-3)  circle[radius=3pt] node[anchor=north west]{(-7,-3)};
+  \fill (-8,8)  circle[radius=3pt] node[anchor=south east]{(-8,8)};
+  \fill (4,2)  circle[radius=3pt] node[anchor=north west]{(4,2)};
+  
+  \draw[draw=red] (-6,3) rectangle (1,-8);
+
+\end{tikzpicture}
+\end{figure}
+
+Iniciamos a busca no nó raiz $nó_{-2}$. Temos que inicialmente encontrar o $nó_{corte}$ e $nó_{-2}$ está dentro de $[-6, 1]$. 
+
+% Então para encontrarmos $nó_{corte}$ iremos \Call{EncontraNóCorte}{$nó_{2}$,$[-8,-2]$}. 
+% $v_{2}$ não é folha, porem não está dentro do intervalo $[-8,-2]$, checamos se $v_{2} > [-8, -2]$, o que é verdadeiro, então iremos checar se o $nó_{-6}$ está dentro do intervalo. Retornamos o $nó_{-6}$ como $nó_{corte}$.
+
 A partir dele faremos uma busca em profundidade para esquerda e para a direita para encontrar todos 
-os valores dentro do intervalo $[-8,2]$. 
-Ao invés de retornar a subárvore da direita, iremos fazer uma busca em profundidade na árvore associada
-$\tau$ do nó à direita. 
-Inicialmente $nó_{1}$, o nó à esquerda $nó_{0}$, está dentro da consulta e portanto realizaremos uma
-busca em profundidade na árvore $\tau$ associada $nó_{0}$.
+os valores dentro do intervalo $[-6,1]$. 
+
+Como na Figura 8, agora estamos no $nó_{-2}$, este não é folha, então prosseguimos.
+Consultaremos em profundidade iniciando pela esquerda. À esquerda de $nó_{-2}$ é $nó_{-6}$, não folha, e portanto checaremos se este está ainda é menor que a consulta, ou seja, se a busca em profundidade pode prosseguir consultando os ramos à esquerda da árvore. $-6 \leq -6$, logo, faremos uma \Call{Busca1DEmAlcance}{$nó_{-4}\rightarrow \tau_{assoc}, -8, 3$}. A árvore auxiliar do $nó_{-4}$ é $\tau_{assoc}$ é a árvore que segue:
 
 
+\begin{figure}
+    \centering
+\begin{tikzpicture}[scale=0.5][nodes={draw, circle}, ->]
+ \node{5}
+    child{ node[rectangle,  fill=gray]{(-2,-7)} }
+    child [missing]
+    child [missing]
+    child [missing]
+    child{ node[rectangle]{(-4,5)}};
+\end{tikzpicture}
+\caption{Pontos na $y$-árvore do $nó_{-4}$}
+\end{figure}
 
+Consultaremos nesta árvore os pontos dentro do intervalo $[-8, 3]$, que retornará os pontos em cinza = \{$(-2,-7)$\}.
+Consultaremos o próximo nó à esquerda, $nó_{-7}$. Por sua vez a consulta $-6 \leq -7$ é falso e iremos avaliar o nó à direita de $nó_{-7}$ que é o ponto $(-6, 2)$ e checamos se está na janela e o retornamos.
+Prosseguiremos com a consulta à direita do $nó_{corte}= nó_{-2}$.
 
+A figura a seguir é a nossa implementação da Árvore de alcance 2D:
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{images/rt_t1.pdf}
+
+  \label{fig:test1}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  
+  \includegraphics[width=.8\linewidth]{images/rt_t2.pdf}
+  \label{fig:test2}
+ 
+\end{minipage}
+ \caption{Resultados das consultas em janela com Árvore de Alcance 2D}
+\end{figure}
 % ----------------------------------------------------------
