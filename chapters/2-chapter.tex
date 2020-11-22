@@ -1,36 +1,22 @@
 % ----------------------------------------------------------
 \chapter{Algoritmos e estruturas de dados para consulta de pontos no plano}\label{cap:desenvolvimento}
 % ----------------------------------------------------------
-Nesta seção veremos formas de construir estruturas de dados para um conjunto de pontos no plano. 
-Consideramos que os pontos são fixos. Para cada estrutura construída, veremos também como utilizá-la para
-consultar pontos dentro de uma janela.
+Nesta seção veremos formas de construir estruturas de dados para um conjunto de pontos no plano. Consideramos que os pontos são fixos. Para cada estrutura construída, veremos também como utilizá-la para consultar pontos dentro de uma janela.
 
 % ----------------------------------------------------------
 \section{Árvore KD}
 % ----------------------------------------------------------
 
 Uma árvore KD é uma árvore binária onde cada folha é um ponto \textit{k-dimensional}.
-Cada nó não-folha guarda um valor $v$ em uma dimensão $d$.
-Pontos cujo os valores na dimensão $d$ são iguais ou menores a $v$ estão na subárvore à esquerda,
-e respectivamente, pontos com valores na dimensão $d$ na subárvore à direita.
-Cada nível da árvore é associado a uma das \textit{k dimensões}. Então, a citar um exemplo no plano,
-se dado nível considera o eixo $x$, a subárvore à esquerda contém os pontos com o eixo $x$ menor que o valor 
-$v$. Similarmente, à direita contém os pontos com o eixo $x$ maior que o valor $v$.
+Cada nó não-folha guarda um valor $v$ em uma dimensão $d$. Pontos cujo os valores na dimensão $d$ são iguais ou menores a $v$ estão na subárvore à esquerda, e respectivamente, pontos com valores na dimensão $d$ maiores que $v$ estão na subárvore à direita. Cada nível da árvore é associado a uma das \textit{k dimensões}. Então, a citar um exemplo no plano,
+se dado nível considera o eixo $x$, a subárvore à esquerda contém os pontos com o eixo $x$ menor que o valor $v$. Similarmente, à direita contém os pontos com o eixo $x$ maior que o valor $v$. Neste caso do plano, o eixo $y$ é considerado no próximo nível da árvore.
 
 \subsection{Árvore 2D}
-Uma árvore 2D é a versão com duas dimensões para árvores KD. A sua construção considera um dado conjunto 
-de pontos no plano ($P$) e pode ser feita da seguinte forma. Na construção de uma árvore para 2 dimensões,
-cada ponto tem uma forma $p = (p_x, p_y)$ . Escolhemos um eixo para iniciar a construção da árvore.
-Ao iniciar a construção, realizamos uma $x$-ordenação e uma $y$-ordenação nos pontos de $P$
-(no caso $n$ dimensional, faremos $n$-ordenações). Chamaremos o conjunto de pontos ordenados pelo eixo
-$x$ de $P_{ord(x)}$, e ordenados por $y$ de $P_{ord(y)}$.
+Uma árvore 2D é a versão com duas dimensões para árvores KD. A sua construção considera um dado conjunto de pontos no plano ($P$) e pode ser feita da seguinte forma. Na construção de uma árvore para 2 dimensões, cada ponto tem uma forma $p = (p_x, p_y)$. Escolhemos um eixo para iniciar a construção da árvore. Ao iniciar a construção, realizamos uma $x$-ordenação e uma $y$-ordenação nos pontos de $P$ (no caso $n$ dimensional, faremos $n$ ordenações, uma para cada dimensão). Chamaremos o conjunto de pontos ordenados pelo eixo $x$ de $P_{ord(x)}$, e ordenados por $y$ de $P_{ord(y)}$.
 
-A seguir, apresentamos uma forma de construir uma árvore 2D\cite{cg08}.
-Fixado um eixo, o valor da mediana dos pontos ordenados neste eixo será o valor $v$ escolhido para dividir
-$P$ em dois subconjuntos, e serão criados dois subconjuntos. Chama-se recursivamente a
-construção das subárvores à esquerda e à direita de $v$ alternando o eixo e passando os subconjuntos.
-Considere o seguinte conjunto de pontos.
-\begin{figure}[H]
+A seguir, apresentamos uma forma de construir uma árvore 2D como em \cite{cg08}.
+Fixado um eixo, o valor da mediana dos pontos ordenados neste eixo será o valor $v$ escolhido para dividir $P$ em dois subconjuntos, e serão criados dois subconjuntos. Chamamos recursivamente a construção das subárvores à esquerda e à direita de $v$ alternando o eixo e passando os subconjuntos. A base do algoritmo ocorre quando o conjunto de pontos possui um único ponto. Neste caso, armazenamos este ponto na folha da árvore.  Vamos ilustrar uma construção de uma árvore 2D considerando o conjunto de pontos da Figura \ref{fig:1}.
+\begin{figure}[h!]
     \centering
     \begin{tikzpicture}[scale=0.33]
   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
@@ -50,35 +36,16 @@ Considere o seguinte conjunto de pontos.
   \fill (4,-6)  circle[radius=5pt] node[anchor=north east]{(4,-6)};
 \end{tikzpicture}
     \caption{Plano com os pontos $P$}
-    \label{fig:my_label}
+    \label{fig:1}
 \end{figure}
 
+Inicialmente escolhemos o eixo $x$. Acompanharemos a troca de eixos de acordo com o nível da árvore. Caso o nível seja \emh{par}, consideramos o eixo $x$, do contrário, o eixo $y$.
+Realizamos uma $x$-ordenação em $P$ obtendo $P_{ord(x)} = ((-13,8), (-11,-7), (-8,6), (-8,-1),$ $(-5,5), (-2, 2), (2,7),$ $ (4,-6),(6,5),(8,-3))$. Com isso, sabemos que a $x$-mediana é $v = -5$ (veja a Figura \ref{fig:2}). Criamos dois subconjuntos $P_1$ e $P_2$ tal que: $P_1 = \{p \in P : p_x \leq v\}$ e $P_2 = \{p \in P : p_x > v\}$; e, de forma recursiva, obtemos as árvores 2D dos dois novos subconjuntos $P_1$ e $P_2$ (as raízes dessas novas árvores consideram o eixo $y$). Por fim, criamos um nó $r$ e armazenamos nele a $x$-mediana (ou seja, $v=-5)$; a subárvore à esquerda de $r$ será uma árvore 2D sobre $P_1$; e a subárvore à direita de $r$ será uma árvore 2D sobre $P_2$. % Dividimos o conjunto de pontos em dois subconjuntos: $P_1$ com os pontos com $x \leq -5$ e $P_2$ com os pontos $x > -5$. Ilustramos tais subconjuntos na Figura \ref{fig:2}  Criamos dois nós: $v_{esq}$ e $v_{dir}$, e associamos os conjuntos $P_1$ e $P_2$ nas chamadas recursivas.
 
+%A região do nó raiz é calculada como: 
+%$ -13 \leq x \leq 8 $ e $ -7 \leq y \leq 8$. 
 
-Inicialmente escolhemos o eixo $x$. Acompanharemos a troca de eixos de acordo com o nível da árvore.
-Caso o nível seja $par$, consideramos o eixo $x$, do contrário, eixo $y$.
-Como temos $P_{ord(x)}$, sabemos que o ponto médio representará o valor $x_{mediana}$.
-Criamos dois subconjuntos $P_1$ e $P_2$ tal que:
-
-    $P_1 = \{p \in P : p_x \leq x_{mediana}\}$ e $P_2 = \{p \in P : p_x > x_{mediana}\}$.
-
-Agora, recursivamente, repete-se para os dois novos conjuntos criados considerando o eixo $y$ e 
-continua da mesma forma até restar somente um ponto. Este, por sua vez, será um nó folha da árvore e
-tratado na base da recursão do algoritmo.
-
-Sejam os pontos da Figura 3, os pontos, segue a construção da árvore.
-Temos $P_{ord(x)}$ = $(-13,8), (-11,-7), (-8,6), (-8,-1), (-5,5), (-2, 2), (2,7), (4,-6),(6,5),(8,-3)$.
-
-Criamos um nó raiz com e armazenamos nela o valor $-5$, dividimos o conjunto de pontos em dois subconjuntos: $P_1$ 
-com os pontos com $x \leq -5$ e $P_2$ com os pontos $x > -5$.
-Criamos dois nós: $v_{esquerda}$ e $v_{direita}$, e associamos os conjuntos $P_1$ e $P_2$ nas chamadas
-recursivas.
-
-A região do nó raiz é calculada como: 
-$ -13 \leq x \leq 8 $ e $ -7 \leq y \leq 8$. 
-
-\begin{figure}
-    \caption{A linha vermelha é o corte no eixo $x$}
+\begin{figure}[h!]
  \centering
   \begin{tikzpicture}[x=0.25cm,y=0.25cm]
 %   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
@@ -98,21 +65,16 @@ $ -13 \leq x \leq 8 $ e $ -7 \leq y \leq 8$.
   \fill (8,-3)  circle[radius=2pt];
   \fill (4,-6)  circle[radius=2pt];
 \end{tikzpicture}
-  
+  \caption{A linha vermelha é o corte no eixo $x$}
+  \label{fig:2}
 \end{figure}
 
-E agora repete-se o procedimento para os subconjuntos $P_1$ e $P_2$.
-Para os pontos de $P_1$, como a profundidade é ímpar, agora considera uma $y$-ordenação e calcula-se a mediana:
-Fazemos uma $y$-ordenação pelos pontos e obtemos a seguinte ordenação:
-$P_{1 ord(y)}$ = \{ $ (-11,7), (-5,-5), (-8,-1), (-8,6), (-13,8)$\}.
+Vale reforçar que o eixo $y$ será considerado para os subconjuntos $P_1$ e $P_2$. Para $P_1$, realizamos uma $y$-ordenação dos pontos e obtemos $P_{1ord(y)} = ((-11,-7), (-5,-5), (-8,-1),$ $(-8,6), (-13,8))$. A $y$-mediana é $v=-1$. O processo continua com a criação dos subconjuntos considerando $P_1$ e depois considerando os pontos em $P_2$. A Figura \ref{fig:3} mostra os cortes no plano utilizados para construir os subconjuntos de pontos. %Criamos um nó e armazenamos nele o valor $v=-1$. Note que com isso, o conjunto de pontos é mais uma vez dividido em $((-11,7), (-5,-5), (-8,-1))$ e $((-8,6), (-13,8))$.
 
-Temos que a mediana é $-1$, criamos um nó e armazenamos nele o valor $-1$. Dividimos o conjunto de 
-pontos em $P_1 = \{ (-11,7), (-5,-5), (-8,-1)\} $ e $P_2 = \{(-8,6), (-13,8) \}$.
-
-Sabemos que o eixo foi cortado em $-5$ em $x$.
-Calculamos a região do $nó_{-1}$ que conterá os pontos $(x,y)$ tal que: $-11 \leq x < -5 \textmd{; e } -5 \leq y < 8$.
+%Sabemos que o eixo foi cortado em $-5$ em $x$.
+%Calculamos a região do $nó_{-1}$ que conterá os pontos $(x,y)$ tal que: $-11 \leq x < -5 \textmd{; e } -5 \leq y < 8$.
  
-\begin{figure}[H]
+\begin{figure}[h!]
     \centering
     \begin{tikzpicture}[x=0.25cm,y=0.25cm]
 %   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
@@ -132,17 +94,15 @@ Calculamos a região do $nó_{-1}$ que conterá os pontos $(x,y)$ tal que: $-11 
   \fill (4,-6)  circle[radius=2pt];
 \end{tikzpicture}
     \caption{A linha verde é o corte no eixo $y$ que divide em relação ao ponto $(-8, -1)$ }
-    \label{fig:my_label}
+    \label{fig:3}
 \end{figure}
 
 
-Repete-se recursivamente o procedimento até o conjunto $P$ na chamada \Call{ConstróiÁrvore2D}{$P$, $prof$}
-contiver somente um ponto. Cria-se então um nó folha, contendo como valor o ponto $p$. A figura a seguir é a representação dos pontos no plano com os eixos de corte para a construção da 
-árvore 2D.
+Este procedimento é repetido até que o conjunto de pontos tenha somente um ponto. Neste caso, criamos um nó folha, contendo o ponto $p$. As Figuras \ref{fig:4} e \ref{fig:5} Ilustra todos os cortes sobre o conjunto de pontos inicial. Estes cortes foram utilizados na construção dos subconjuntos de pontos. % e utilizados para  e a construção da árvore 2D correspondente.% sentação dos pontos no plano com os eixos de corte para a construção da árvore 2D.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
-   \begin{tikzpicture}[x=0.5cm,y=0.5cm]
+   \begin{tikzpicture}[x=0.25cm,y=0.25cm]
 %   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
   \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
   \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
@@ -169,44 +129,12 @@ contiver somente um ponto. Cria-se então um nó folha, contendo como valor o po
   \fill (4,-6)  circle[radius=2pt] node[anchor=north east]{(4)};
 \end{tikzpicture}
     \caption{Plano $P$ com a subdivisão dos pontos e as linhas cinza são os cortes dos nós da árvore 2D}
-    \label{fig:my_label}
+    \label{fig:4}
 \end{figure}
 
-
-
- A árvore 2D correspondente à figura anterior e o pseudocódigo
-para a construção de uma árvore 2D são dados em seguida.
-
-
-\begin{algorithm}
-    \caption{O algoritimo \Call{ConstróiArvore2D}{$P$, $profundidade=0$}, recebe um conjunto de 
-    pontos $P$ no plano e uma profundidade da árvore.
-    O algoritmo devolve a raiz de uma árvore 2D.}
-    \begin{algorithmic}[1]
-        \Function{ConstróiÁrvore2D}{$P$, $profundidade$}
-            \If{P contém apenas um ponto}
-            \Return $nó \leftarrow ponto$
-        \Else
-            \If{$profundidade$ é par}
-            \State 
-                Divide P em dois subconjuntos pela mediana $l$ da $x$-coordenada dos pontos \newline
-                \hspace*{5em}em P. Seja $P_1$ o conjunto dos pontos à esquerda de $l$ e seja $P_2$
-                \hspace*{5em} o conjunto de pontos à direita de $l$.
-            \Else
-            \State
-                Divide P em dois subconjuntos com um pela mediana $l$ da $y$-coordenada dos pontos em P.
-                Seja $P_1$ o conjunto dos pontos abaixo de $l$ e seja $P_2$ o conjunto de pontos acima de $l$.
-            \EndIf
-        \EndIf
-        \State Cria os nós $v_{esquerda}$ e $v_{direita}$
-        \State $v_{esquerda} \leftarrow $ \Call{ConstróiÁrvore2D}{$P_1, profundidade+1$}
-        \State $v_{direita} \leftarrow $ \Call{ConstróiÁrvore2D}{$P_2, profundidade+1$}
-        \State Cria um nó $v$, associamos o valor $l$ e associamos os filhos $v_{esquerda}$ e $v_{direita}$ 
-
-        \Return $v$
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
+% A árvore 2D correspondente à figura anterior e o pseudocódigo
+%para a construção de uma árvore 2D são dados em seguida.
+A Figura \ref{fig:5} ilustra a árvore 2D completa para o conjunto de pontos considerados anteriormente. Logo depois, descrevemos um algoritmo que constrói uma árvore 2D para um dado conjunto de pontos no plano. 
 
 \begin{figure}
     \centering
@@ -247,49 +175,60 @@ para a construção de uma árvore 2D são dados em seguida.
     };
 \end{tikzpicture}
     \caption{Árvore 2D construída. O $nó_{4}$ indica a área da Figura 6}
-    \label{fig:my_label}
+    \label{fig:5}
 \end{figure}
 
+\begin{algorithm}[h!]
+    \caption{Recebe um conjunto de pontos $P$ no plano e uma profundidade da árvore. Devolve a raiz de uma árvore 2D.}
+    \begin{algorithmic}[1]
+        \Function{ConstróiÁrvore2D}{$P$, $profundidade$}
+            \If{$P$ contém apenas um ponto}
+                \Return nó folha que armazena o ponto de $P$
+            \Else
+                \If{$profundidade$ é par}
+                    \State Faça uma $x$-ordenação sobre $P$
+                    \State Divide $P$ em dois subconjuntos pela $x$-mediana ($v$) 
+                    \State Seja $P_1$ o conjunto dos pontos à esquerda de $v$
+                    \State Seja $P_2$ o conjunto de pontos à direita de $v$
+                \Else
+                    \State Faça uma $y$-ordenação sobre $P$
+                    \State Divide $P$ em dois subconjuntos pela $y$-mediana ($v$)
+                    \State Seja $P_1$ o conjunto dos pontos abaixo de $v$
+                    \State Seja $P_2$ o conjunto de pontos acima de $v$
+                \EndIf
+            \EndIf
+            \State Cria os nós $r_{esquerda}$ e $r_{direita}$
+            \State $v_{esquerda} \leftarrow $ \Call{ConstróiÁrvore2D}{$P_1, profundidade+1$}
+            \State $v_{direita} \leftarrow $ \Call{ConstróiÁrvore2D}{$P_2, profundidade+1$}
+            \State Cria um nó $r$, armazene em $r$ o valor $v$ e associe os filhos $r_{esquerda}$ e $r_{direita}$ 
+            \State \Return $r$
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
 
-\clearpage
+\subsection{Consulta de pontos em árvores 2D}
 
+Uma consulta em uma árvore 2D construída sobre um conjunto de pontos $P$ é uma busca de quais pontos de $P$ estão entre um retângulo de consulta
+\([x,x']  \times  [y,y']\) que chamaremos de janela. Um ponto $p = (p_x, p_y)$ está dentro de um retângulo de busca se $p_x \in [x, x'] \textrm{ e } p_y \in [y, y']$. Podemos dizer que uma consulta no plano é composta de duas subconsultas nos eixos: uma no eixo $x$ e outra no eixo $y$.
 
-\subsection{Consulta}
-Uma consulta 2-dimensional em $P$ é uma busca de quais pontos de $P$ estão entre um retângulo de consulta
-\([x,x']  \times  [y,y']\) que chamaremos de janela. Um ponto $p:= (p_x, p_y)$ está dentro de um
-retângulo de busca se $p_x \in [x, x'] \textrm{ e } p_y \in [y, y']$.
+%Denotaremos uma região de um nó \(r\) como \(região(r)\). Portanto, o algoritmo de consulta buscará pela subárvore com raiz \(r\) somente se o retângulo de busca intersectar a \(região(r)\).
 
-Podemos dizer que uma consulta 2-dimensional é composta de duas sub-consultas 1-dimensional: uma no
-eixo \(x\) e uma consulta no eixo \(y\).
+Seja $P^r$ o conjunto de pontos em folhas alcançáveis a partir de $r$. Podemos definir uma \emph{região} retangular a partir dos pontos em $P^r$ (denotamos tal região por região($r$)): %Então, a $região(r)$, que é um retângulo no plano, pode ser definida através do intervalo:
+$$
+ \mbox{região}(r) = \begin{cases} \min_x(p) \leq x \leq \max_x(p),\ \forall p \in P^r\\ \min_y(p) \leq y \leq \max_y(p),\ \forall p \in P^r \end{cases} 
+$$
 
-Denotaremos uma região de um nó \(v\) como \(região(v)\). Portanto, o algoritmo buscará pela subárvore
-com raiz \(v\) somente se o retângulo de busca intersectar a \(região(v)\).
+O algoritmo de consulta buscará pela subárvore com raiz \(r\) somente se o retângulo de busca intersectar a região($r$). Um exemplo de uma região de um nó de uma árvore 2D pode ser observado na Figura \ref{fig:5}. A região do nó$_4$ (que guarda o valor 4) é
+$$
+\mbox{região}(\mbox{nó}_4) =  \begin{cases} -2 \leq x \leq 8 \\ -6 \leq y \leq 2 \end{cases} 
+$$
 
-Seja $P_v$ o conjunto de pontos em folhas alcançáveis a partir de $v$.
-Vamos definir a $região(v)$. Seja $P_v$ o conjunto de pontos folhas da árvore alcançáveis a partir de $v$.
-Então, a $região(v)$, que é um retângulo no plano, pode ser definida através do intervalo:
-\[
- \mbox{
-    região(v)=  \begin{cases} min(p_x) \leq x \leq max(p_x) \\ min(p_y) \leq y \leq max(p_y) \end{cases} 
- }
-\]
+Dada uma janela de consulta, o algoritmo de busca funciona descendo a árvore, mas visitando somente os nós $r$ cuja
+\(\mbox{região}(r)\) intersecta a janela. Quando uma \(\mbox{região}(r)\) está contida na janela de consulta, devolvemos todos os pontos na subárvore enraizada em $r$. No caso em que chegamos em um nó folha, temos que verificar se o nó está dentro da janela, e se estiver, devolvê-lo.
 
-Por exemplo, na figura da árvore 2D anterior, a região do $nó_4$ que guarda o valor 4 
-\[
-\mbox{
-    região_4 =  \begin{cases} -2 \leq x \leq 8 \\ -6 \leq y \leq 2 \end{cases} 
-}
-\]
-
-Dada uma janela, algoritmo de busca funciona descendo a árvore, mas visitando somente os nós $v$ cuja
-\(região(v)\) intersecta a janela. Quando uma \(região(v)\) está contida na janela de busca devolvemos
-todos os pontos na subárvore enraizada em $v$. No caso em que chegamos em um nó folha, temos 
-que verificar se o nó está dentro da janela, se estiver, devolvê-lo.
-
-\begin{figure}[H]
-    \caption{Em vermelho a região do nó da árvore anterior com o valor 4 armazenado}
+\begin{figure}[h!]
     \centering
-\begin{tikzpicture}[scale=0.33]
+\begin{tikzpicture}[scale=0.35]
   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
   \draw[-stealth] (-15,0)--(15,0) node[right]{x}; % x axis
   \draw[-stealth] (0,-12)--(0,12) node[above]{y}; % y axis
@@ -310,35 +249,33 @@ que verificar se o nó está dentro da janela, se estiver, devolvê-lo.
   
 
 \end{tikzpicture}
+\caption{Em vermelho a região do nó da árvore anterior com o valor 4 armazenado}
+\label{fig:6}
 \end{figure}
 
-Segue o algoritmo que recebe como parâmetros a raiz de uma árvore 2D e uma janela R.
-Usamos uma chamada \Call{ReportaSubárvore}{$v$} que atravessa a árvore do nó \(v\) e devolve
-todos os pontos nas suas folhas. Segue como notação \(filho_{esq}(v)\) sendo o filho à esquerda e
-\(filho_{dir}(v)\) o filho à direita do nó \(v\).
+Segue o algoritmo que recebe como parâmetros a raiz de uma árvore 2D e uma janela $R$.
+Usamos uma chamada \Call{ReportaSubárvore}{$r$} que atravessa a árvore do nó \(r\) e devolve todos os pontos nas suas folhas. Segue como notação \(filho_{esq}(r)\) sendo o filho à esquerda e \(filho_{dir}(r)\) o filho à direita do nó \(r\).
 
 
 \begin{algorithm}[H]
-    \caption{A função \Call{ConsultaEmÁrvore2D}{$v$, $R$} recebe como parâmetro um nó e uma 
-    janela $R$.
-    Devolve todos os pontos dentro de R.}
+    \caption{Recebe como parâmetro um nó $r$ e uma janela $R$. Devolve todos os pontos dentro de $R$.}
     \begin{algorithmic}[1]
-    \Function{ConsultaEmÁrvore2D}{$v$, $R$}
+    \Function{ConsultaEmÁrvore2D}{$r$, $R$}
         \If{v é folha}
         \Return  $v$ se estiver dentro da $R$
         \Else
-            \If{$região(filho_{esq}(v))$ está contido na $R$}
-            \State \Return \Call{ReportaSubárvore}{$filho_{esq}(v)$}
+            \If{$\mbox{região}(filho_{esq}(r))$ está contido na $R$}
+            \State \Return \Call{ReportaSubárvore}{$filho_{esq}(r)$}
             \Else
-                \If{$região(filho_{esquerda}(v))$ intersecta $consulta$}
-                \State \Return \Call{ConsultaEmÁrvore2D}{$filho_{esq}(v)$, $consulta$}
+                \If{$\mbox{região}(filho_{esq}(r))$ intersecta $R$}
+                \State \Return \Call{ConsultaEmÁrvore2D}{$filho_{esq}(r)$, $R$}
                 \EndIf
             \EndIf
-            \If{$região(filho_{dir}(v))$ está contido na $R$}
-                \State \Call{ConsultaEmÁrvore2D}{$filho_{dir}(v)$, $R$}
+            \If{$\mbox{região}(filho_{dir}(r))$ está contido na $R$}
+                \State \Return \Call{ReportaSubávore}{$filho_{dir}(r)$, $R$}
             \Else
-                \If{$região(filho_{dir}(v))$ intersecta $R$}
-                \State \Return \Call{ConsultaEmÁrvore2D}{$filho_{dir}(v)$, $R$}
+                \If{$\mbox{região}(filho_{dir}(r))$ intersecta $R$}
+                \State \Return \Call{ConsultaEmÁrvore2D}{$filho_{dir}(r)$, $R$}
                 \EndIf
             \EndIf
         \EndIf
@@ -346,32 +283,23 @@ todos os pontos nas suas folhas. Segue como notação \(filho_{esq}(v)\) sendo o
     \end{algorithmic}
 \end{algorithm}
 
-Para realizarmos uma busca na árvore construída, com uma consulta $ -3 \leq x \leq 9 $ e $-7 \leq y < 3$.
-Iniciamos no nó $-5$. Como o nó não é folha, checamos se a região do filho à esquerda esta dentro da consulta.
-O $nó_{-1}$ tem região $ -13 \leq x \leq -5 $ e  $ -7 \leq y \leq 8$, logo a região não está contida 
-na consulta.
+Vamos acompanhar uma consulta na árvore construída da Figura \ref{fig:5}. Considere uma janela $[-3, 9]\times[-7, 3]$. %consulta $ -3 \leq x \leq 9 $ e $-7 \leq y < 3$. 
+Iniciamos no nó$_-5$. Como o nó não é folha, checamos se a região do filho à esquerda esta dentro da consulta. O $\mbox{nó}_{-1}$ tem região $ -13 \leq x \leq -5 $ e  $ -7 \leq y \leq 8$, logo a região não está contida na consulta. Assim como a região do nó$_2$. Porém, as regiões dos $\mbox{nó}_2$ e $\mbox{nó}_{-1}$ intersectam o retângulo da consulta. Então procedemos com a consulta em ambos os nós. %chamando \Call{BuscaEmArvore}{$\mbox{nó}_{-1}$, consulta} e \Call{BuscaEmArvore}{$\mbox{nó}_{2}$, consulta}. 
+Note que o filho à esquerda do $\mbox{nó}_{2}$ ($\mbox{nó}_4$ em destaque na Figura \ref{fig:5}) possui região contida na janela de consulta. Portanto todos os pontos das folha alcançáveis a partir deste nó estão na janela. 
 
-A região dos nós $nó_2$ e $nó_{-1}$ intersectam a consulta, então procedemos chamando
-\Call{BuscaEmArvore}{$nó_{-1}$, consulta} e \Call{BuscaEmArvore}{$nó_{2}$, consulta}.
-
-O $nó_{2}$, o $filho_{esquerda}$ é o $nó_4$, que está contido na região da consulta e portanto todos
-os pontos folha são retornados.
-
-\subsection{Otimização}
+\subsection{Otimização para a construção de uma árvore 2D}
 A forma como implementamos o algoritmo de construção realiza ordenações em cada chamada.
-Uma otimização para a implementação da construção da árvore KD é realizar apenas $d$ ordenações, onde $d$
-é o número de dimensões da árvore KD.
-Para isto é preciso ordenar os pontos antes do inicio da construção da árvore e durante a troca de eixo
-da árvore, é checar quais pontos no nó pai foram removidos e desconsiderá-los no eixo atual.
-
-A Figura 4 corresponde a uma figura gerada por nossas implementações da árvore 2D. Como esperado, os pontos dentro de uma janela foram retornados.
-\begin{figure}[H]
-    \caption {Resultados de busca com Arvore2D}
+Uma otimização para a implementação da construção da árvore 2D considera apenas 2 ordenações, uma para cada eixo. %, onde $d$ é o número de dimensões da árvore KD.
+Para isto, é preciso ordenar os pontos nos dois eixos antes do inicio da construção da árvore e, a cada chamada do algoritmo que constrói a árvore, conseguimos construir os subconjuntos de pontos ordenados em tempo linear, sempre considerando uma ordenação do conjunto de pontos que originou essa chamada. % e durante a troca de eixo da árvore, é checar quais pontos no nó pai foram removidos e desconsiderá-los no eixo atual.
+Por último, a Figura \ref{fig:7} corresponde a uma figura gerada por nossa implementação da árvore 2D. Como esperado, os pontos dentro de uma janela foram encontrados.
+\begin{figure}[ht!]
     \begin{center}
         \includegraphics{images/points.pdf}
     \end{center}
+    \caption {Resultados de busca em uma árvore 2D}
+    \label{fig:7}
 \end{figure}
-\clearpage
+%\clearpage
 
 
 
