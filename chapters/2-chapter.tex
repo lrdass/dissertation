@@ -39,7 +39,7 @@ Fixado um eixo, o valor da mediana dos pontos ordenados neste eixo será o valor
     \label{fig:1}
 \end{figure}
 
-Inicialmente escolhemos o eixo $x$. Acompanharemos a troca de eixos de acordo com o nível da árvore. Caso o nível seja \emh{par}, consideramos o eixo $x$, do contrário, o eixo $y$.
+Inicialmente escolhemos o eixo $x$. Acompanharemos a troca de eixos de acordo com o nível da árvore. Caso o nível seja \emph{par}, consideramos o eixo $x$, do contrário, o eixo $y$.
 Realizamos uma $x$-ordenação em $P$ obtendo $P_{ord(x)} = ((-13,8), (-11,-7), (-8,6), (-8,-1),$ $(-5,5), (-2, 2), (2,7),$ $ (4,-6),(6,5),(8,-3))$. Com isso, sabemos que a $x$-mediana é $v = -5$ (veja a Figura \ref{fig:2}). Criamos dois subconjuntos $P_1$ e $P_2$ tal que: $P_1 = \{p \in P : p_x \leq v\}$ e $P_2 = \{p \in P : p_x > v\}$; e, de forma recursiva, obtemos as árvores 2D dos dois novos subconjuntos $P_1$ e $P_2$ (as raízes dessas novas árvores consideram o eixo $y$). Por fim, criamos um nó $r$ e armazenamos nele a $x$-mediana (ou seja, $v=-5)$; a subárvore à esquerda de $r$ será uma árvore 2D sobre $P_1$; e a subárvore à direita de $r$ será uma árvore 2D sobre $P_2$. % Dividimos o conjunto de pontos em dois subconjuntos: $P_1$ com os pontos com $x \leq -5$ e $P_2$ com os pontos $x > -5$. Ilustramos tais subconjuntos na Figura \ref{fig:2}  Criamos dois nós: $v_{esq}$ e $v_{dir}$, e associamos os conjuntos $P_1$ e $P_2$ nas chamadas recursivas.
 
 %A região do nó raiz é calculada como: 
@@ -307,28 +307,26 @@ Por último, a Figura \ref{fig:7} corresponde a uma figura gerada por nossa impl
 \section{Árvore de Alcance}
 % ----------------------------------------------------------
 
-Uma árvore de alcance é  uma árvore binária onde cada nó não folha é um ponto $k$-dimensional
-onde guarda um valor $v$ em uma dimensão $d$ e uma árvore binária auxiliar $\tau$. Para cada $k$-dimensão
-existirá uma árvore auxiliar $\tau$ para cada dimensão.\cite{dsp_rt1}
+Uma árvore de alcance pode ser implementada considerando várias dimensões. No caso geral, com $k$ dimensões, teremos $k$ níveis de árvores binárias de busca todas balanceadas. Uma dimensão está relacionada a cada nível. O primeiro nível é formado por uma árvore binária de busca balanceada relacionada a dimensão, digamos, 1. Cada nó desta árvore guarda um valor da dimensão 1, mais uma outra árvore binária de busca balanceada relacionadas à dimensão 2. Cada nó do segundo nível, guarda uma valor da dimensão 2, mais uma outra árvore relacionada à dimensão 3. E assim por diante. Neste trabalho consideramos uma árvore de alcance para 2 dimensões (2D). Denotamos por $\tau_r$ a raiz de uma árvore relacionada a um nó $r$. Neste caso, o nó $r$ em um nível e $\tau_r$ no nível seguinte \cite{dsp_rt1}. A Figura \ref{fig:8} ilustra uma árvore de alcance 2D. Note que as folhas da árvore do primeiro nível (à esquerda) aparecem como folhas em uma árvore do segundo nível (à direita). % de uma  Para o caso com  onde cada nó não folha é um ponto $k$-dimensional
+%onde guarda um valor $v$ em uma dimensão $d$ e uma árvore binária auxiliar $\tau$. Para cada $k$-dimensão
+%existirá uma árvore auxiliar $\tau$ para cada dimensão.\cite{dsp_rt1}
 
-\begin{figure}[htb]
-    \caption{\label{fig:Fig_26} — Arvore de Alcance 2D}
+\begin{figure}[htb!]
     \begin{center}
         \includegraphics[scale=0.5]{images/range_tree1.pdf}
     \end{center}
+    \caption{\label{fig:Fig_26} — Árvore de Alcance 2D}
+    \label{fig:8}
 \end{figure}
+
+\textbf{ACENTUE AS PALAVRAS \underline{ÁRVORE} NA FIGURA \ref{fig:8}}
 
 \subsection{Árvore de Alcance 2D}
 
-Uma árvore de alcance 2D é uma versão de duas dimensões para a árvores de alcance. A construção considera
-um dado conjunto de pontos $P$ e pode ser feita da seguinte forma:
-Temos os pontos da forma $p = (p_x, p_y)$. Ao iniciar a construção, fixamos o eixo $x$;
-Construímos uma árvore binária balanceada considerando os valores na $x$-coordenada dos pontos $P$;
-Para cada nó não folha $v$ construiremos uma árvore auxiliar $\tau$ com todos os pontos alcançáveis 
-a partir de $v$; Esta árvore será construída considerando os valores da $y$-coordenada. Associamos 
-$\tau$ ao nó $v$; Os nós folhas por sua vez guardarão os pontos em si.
+Uma árvore de alcance 2D é uma versão de duas dimensões para a árvores de alcance. A construção considera um dado conjunto de pontos $P$ e pode ser feita da seguinte forma.
+Temos os pontos na forma $p = (p_x, p_y)$. Ao iniciar a construção, fixamos o eixo $x$ para o primeiro nível; construímos uma árvore binária de busca balanceada $T$ considerando os valores na $x$-coordenada dos pontos de $P$; para cada nó não folha $r$ de $T$ construiremos uma árvore auxiliar $\tau_r$ com todos as folhas alcançáveis a partir de $r$. Estas árvores serão construídas considerando os valores da $y$-coordenada. Por fim, associamos $\tau_r$ ao nó $r$. Os nós folhas das árvores guardarão os pontos de $P$.
 
-Considere o seguinte conjunto de pontos.
+Vamos considerar o seguinte conjunto de pontos $P$ da Figura \ref{fig:9} para ilustrar a construção de uma árvore de alcance 2D.
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=0.33]
@@ -350,53 +348,46 @@ Considere o seguinte conjunto de pontos.
 
 \end{tikzpicture}
 \caption{Pontos $P$ no plano}
+\label{fig:9}
 \end{figure}
 % imagem
 
-Para construir uma árvore binária balanceada é necessário que os pontos estejam ordenados.
-Ordenamos os pontos $P$ pela $x$-coordenada inicialmente. Escolhemos o ponto médio $x_{mediana}$ guardamos
-em $v$ e criamos dois subconjuntos $P_1$ e $P_2$ tal que:
+Para construir uma árvore binária de busca balanceada do primeiro nível, podemos inicialmente ordenar os pontos de $P$ pela %  é necessário que os pontos estejam ordenados.
+%Ordenamos os pontos $P$ pela 
+$x$-coordenada. %inicialmente. 
+Pegamos o ponto médio da $x$-coordenada, $x_{med}$, e o guardamos em um nó $r$ da árvore. Depois, criamos dois subconjuntos $P_1$ e $P_2$ tal que $P_1 = \{p \in P : p_x \leq x_{med}\}$ e $P_2 = \{p \in P : p_x > x_{med}\}$. Criamos uma árvore binária de busca balanceada $\tau_r$ considerando o valor da $y$-coordenada dos pontos de $P$. A árvore de segundo nível associada ao vértice $r$ será $\tau_r$. O processo continua de forma recursiva sobre os dois novos conjuntos $P_1$ e $P_2$. Em seguida, adicionamos o pseudocódigo deste procedimento.
 
-    $P_1 = \{p \in P : p_x \leq x_{mediana}\}$ e $P_2 = \{p \in P : p_x > x_{mediana}\}$.
-
-Criamos uma árvore binária balanceada $\tau$ considerando o valor da $y$-coordenada dos pontos
-de $P$.
-A árvore associada correspondente e o pseudocódigo são dados em seguida.
-
-\begin{algorithm}[H]
-    \caption{A função \Call{ConstróiÁrvoreAlcance2D}{$R$} Recebe como entrada um conjunto de pontos 
-    $P$ e devolve o nó raiz de uma árvore de alcance 2-$dimensional$.}
+\begin{algorithm}[h!]
+    \caption{Recebe como entrada um conjunto de pontos $P$. Devolve o nó raiz de uma árvore de alcance 2D.}
     \begin{algorithmic}[1]
-    \Function{ConstróiArvoreAlcance2D}{ $R$}
-        \State Constrói a árvore binária associada: Constrói uma árvore binária $\tau_{associada}$ no conjunto de pontos
-        $P_y$  de $y$-coordenadas dos pontos em $P$. Nas folhas de de $\tau_{associada}$ guardaremos
-        os pontos em si.
-        \If{$P$ contem apenas um ponto}
-            \State Cria um nó $v$ guardando o ponto e fazemos $\tau_{associada}$ a árvore associada 
-            à $v$.
+    \Function{ConstróiÁrvoreAlcance2D}{$P$}
+    \State Criamos um novo nó $r$
+        \State Construímos uma árvore binária de busca balanceada associada ao nó $r$ sobre os pontos $P$ e considerando a $y$-coordenada. A árvore será denotada por $\tau_r$.%: Constrói uma árvore binária $\tau_r$ no conjunto de pontos $P_y$  de $y$-coordenadas dos pontos em $P$. Nas folhas de de $\tau_{associada}$ guardaremos os pontos em si.
+        \If{$P$ contém apenas um ponto}
+            \State Guardamos o ponto de $P$ em $r$.
+            \State Associamos $\tau_r$ ao nó $r$. %Cria um nó $r$ guardando o ponto e fazemos $\tau_{associada}$ a árvore associada à $v$.
+            
         \Else
-            \State Dividimos $P$ em dois subconjuntos. $P_1$ contem os pontos com a $x$-coordenada $\leq$
-            que $x_{mediana}$, e $P_2$ contém os pontos com $x$-coordenada $>$ que $x_{mediana}$.
-            \State $v_{esq} \leftarrow $ \Call{ConstróiArvoreAlcance2D}{$P_1$}
-            \State $v_{dir} \leftarrow $ \Call{ConstróiArvoreAlcance2D}{$P_2$}
-            \State Criamos um nó $v$ guardando $x_{mediana}$, fazemos $v_{esq}$ e $v_{dir}$ filhos de 
-            $v$ e associamos $\tau_{associada}$ a estrutura associada de $v$.
+            \State Dividimos $P$ em dois subconjuntos. 
+            \State $P_1$ contém os pontos com a $x$-coordenada $\leq$ que $x_{med}$.
+            \State $P_2$ contém os pontos com $x$-coordenada $>$ que $x_{med}$.
+            \State $v_{esq} \leftarrow $ \Call{ConstróiÁrvoreAlcance2D}{$P_1$}.
+            \State $v_{dir} \leftarrow $ \Call{ConstróiÁrvoreAlcance2D}{$P_2$}.
+            \State Criamos um nó $v$ guardando $x_{med}$.
+            \State Fazemos $v_{esq}$ e $v_{dir}$ filhos à esquerda e à direita de $v$.
+            \State Associamos $\tau_{r}$ ao nó $r$.
         \EndIf
-    \Return $v$
+    \State\Return $v$
     \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
 %pseudo codigo
 
-Sejam os pontos da figura ordenados pelo eixo $x$ =
+Vamos seguir alguns passos da construção de uma árvore de alcance. Considere os os pontos da Figura \ref{fig:9} ordenados pelo eixo $x$: $P_{ord(x)} = \{(-8,8), (-7, -3), (-6, 2), (-4,5),$ $(-2,-7),(0,10), (3,-9), (4,2), (7,-11), (15,3)\}$. Criamos um nó raiz $r$ e nele armazenamos o valor da $x_{med} = -2$. Dividimos o conjunto de pontos em dois subconjuntos $P_1$ com os pontos $x\leq -2$ e $P_2$ com os valores $x > -2$.
+Com relação à árvore de segundo nível relacionada ao conjunto $p$ inicial, fazemos uma $y$-ordenação nos pontos de $P$ e construímos uma árvore binária balanceada considerando os valores do eixo $y$ e associaremos a árvore resultante à raiz $r$ (ou nó$_{-2}$) da árvore do primeiro nível. 
 
-$(-8,8), (-7, -3), (-6, 2), (-4,5), (-2,-7),(0,10), (3,-9), (4,2), (7,-11), (15,3) $
-
-Criamos um nó raiz com o valor da $x_{mediana} = 2$. Dividindo o conjunto de pontos em dois subconjuntos:
-$P_1$ com os pontos $x\leq 2$ e $P_2$ com os valores $x > 2$.
-Fazemos uma $y$-ordenação nos pontos e construiremos uma árvore binária balanceada considerando os 
-valores dos pontos pelo eixo $y$ e associaremos a árvore resultante à raiz $nó_2$ da árvore.
+\textbf{VOU PARAR AQUI LUCAS ATÉ VOCÊ LER MAIS UMA VEZ PARA CORRIGIR O TEXTO. NÃO ALTERE NADA QUE VEM ANTES DESSE TEXTO. SOMENTE ALTERE O QUE VEM DEPOIS. RELEIA COM ATENÇÃO TODO O TEXTO PARA SE ACOSTUMAR COM A NOSSA NOTAÇÃO E A FORMA COMO ESCREVEMOS. A PARTIR DESTE PONTO, RELEIA O SEU TEXTO COM ATENÇÃO CORRIGINDO OS ERROS. MUITA ATENÇÃO COM O QUE VOCÊ ESCREVE E O QUE DE FATO É (CONFORME O EXEMPLO SEGUIDO). POR EXEMPLO, VOCÊ ESCREVEU QUE A $x_{med} = 2$ PARA O CASO ACIMA. MAS O CORRETO É $-2$... NÃO ESQUEÇA DE ACENTUAR AS PALAVRAS, POR EXEMPLO, \underline{ÁRVORE}. CONSEGUI REMOVER TODOS OS "ERROS DE COMPILAÇÃO". POR FAVOR, TENTE NÃO INSERIR NENHUM NOVO "ERRO DE COMPILAÇÃO".}
 
 Criamos dois nós: $v_{esquerda}$ e $v_{direita}$ e associamos os conjuntos $P_1$ e $P_2$ nas chamadas
 recursivas.
@@ -405,7 +396,7 @@ Agora repete-se o procedimento para os subconjuntos $P_1$ e $P_2$.
 Para os pontos de $P_1$, temos o valor $x_{mediana} = -6$. Associaremos a este nó a árvore binária auxiliar
 construída com os pontos de $P_1$ ordenados pela $y$-coordenada.
 % arvore com nó 1 e nó 2, nó_2 indicando a árvore associada construida 
-\begin{figure}[H]
+\begin{figure}[h!]
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
@@ -447,7 +438,7 @@ Repete-se recursivamente \Call{ConstróiArvoreAlcance2D}{$P$} até o conjunto $P
 Cria-se um nó folha contendo como valor o ponto $p$ em ambas as árvores.
 
 A figura a seguir é a representação dos pontos no plano em uma árvore de alcance.
-\begin{figure}[H]
+\begin{figure}[h!]
 
 \begin{tikzpicture}[nodes={draw, circle}, ->]
     % Tree structure
@@ -508,7 +499,6 @@ Seja uma árvore binária balanceada $\Gamma$. Uma consulta de intervalo em $\Ga
 todos os nós folhas de $\Gamma$ cujo valor esteja dentro do intervalo consultado $[x, x']$.
 
 \begin{figure}
-    
     \begin{center}
         \includegraphics[scale=0.4]{images/range_tree2.pdf}
     \end{center}
@@ -548,10 +538,8 @@ se está dentro do intervalo, caso esteja reporta-o.
 
 Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta unidimensional.
 
-\begin{algorithm}
-    \caption{A função \Call{EncontraNóCorte}{$v$, $R:[x, x']$} recebe como parâmetro um nó e uma 
-    janela.
-     E devolve o primeiro ponto dentro janela de consulta.}
+\begin{algorithm}[h]
+    \caption{Recebe como parâmetro um nó e uma janela. Devolve o primeiro ponto dentro janela de consulta.}
     \begin{algorithmic}[1]
     \Function{EncontraNóCorte}{$v$, $R:[x, x']$}
         \While{$v$ não é folha}
@@ -564,14 +552,14 @@ Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta uni
                 \State $v \leftarrow v_{direita}$
             \EndIf
         \EndIf
+        \EndWhile
     \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
 
-\begin{algorithm}
-    \caption{A função \Call{Busca1DEmAlcance}{$v$, $R:[x, x']$} recebe um nó e uma consulta e retorna todos
-    os pontos dentro da consulta.}
+\begin{algorithm}[h]
+    \caption{Recebe um nó e uma consulta. Devolve todos os pontos dentro da consulta.}
     \begin{algorithmic}[1]
     \Function{Busca1DEmAlcance}{$v_{corte}$, $R:[x, x']$}
         \If{$v_{corte}$ é folha}
@@ -592,8 +580,7 @@ Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta uni
                 \State Reporta ponto $v$
             \EndIf
             \State Similarmente, agora segue o caminho $filho_{dir}(v_{corte})$
-            
-        \Endif
+        \EndIf
     \EndFunction
     \end{algorithmic}
 \end{algorithm}
@@ -604,7 +591,7 @@ Na figura 7 temos a árvore construída em relação a coordenada $y$.
 Iremos fazer uma consulta unidimensional de intervalo nesta árvore inicialmente.
 Seja o intervalo de consulta $R = [-8, 3]$ segue na figura em seguida:
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
     \caption {Em azul, a consulta unidimensional em $y$ nos pontos em $P$}
 \begin{tikzpicture}[scale=0.33]
@@ -643,7 +630,7 @@ A busca em profundidade continuará até o $nó_{raiz}=\{(-2,-7)\}$, que satisfa
 Realizaremos o mesmo procedimento, porem, á partir de $nó_{corte}$ iremos realizar busca em profundidade pela direita considerando se o valor do nó é $nó \leq 3$.
 
 Por fim teremos os pontos: \{$(-2,-7), (-7,-3), (-6,2)$\}
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \resizebox{.6\textwidth}{!}{
 \begin{tikzpicture}[nodes={draw, circle}, ->]
@@ -676,9 +663,8 @@ Iremos para cada nó visitado que está dentro da janela de consulta, será feit
 na árvore $\tau$ associada ao nó.
 Segue pseudocódigo pra consulta bidimensional:
 
-\begin{algorithm}[H]
-    \caption{A função \Call{Busca2DEmAlcance}{$v$, $R$} recebe um nó e uma consulta e retorna todos
-    os pontos dentro da consulta.}
+\begin{algorithm}[h!]
+    \caption{Recebe um nó e uma consulta. Devolve todos os pontos dentro da consulta.}
     \begin{algorithmic}[1]
     \Function{Busca2DEmAlcance}{$v_{corte}$, $R : [x,x'] \times [y,y']$}
         \State $v_{corte} \leftarrow$ \Call{EncontraNóCorte}{$\tau$, $x, x'$}
@@ -709,9 +695,8 @@ Iremos agora demonstrar uma consulta bidimensional:
 Seja o intervalo de consulta $R = [-6, 1] \times [-8, 3]$
 Como explicitado, será uma junção de consultas unidimensionais na $x$-árvore com a consulta $[-6,1]$ e uma consulta nas $y$-árvores associadas entre $[3,-8]$
 
-\begin{figure}
+\begin{figure}[h]
 
-    \caption {Em vermelho a região do retângulo de consulta}
     \centering
 \begin{tikzpicture}[scale=0.33]
   \draw[gray!30] (-15,-12) grid[xstep=1, ystep=1]  (15,12);
@@ -733,6 +718,7 @@ Como explicitado, será uma junção de consultas unidimensionais na $x$-árvore
   \draw[draw=red] (-6,3) rectangle (1,-8);
 
 \end{tikzpicture}
+\caption {Em vermelho a região do retângulo de consulta}
 \end{figure}
 
 Iniciamos a busca no nó raiz $nó_{-2}$. Temos que inicialmente encontrar o $nó_{corte}$ e $nó_{-2}$ está dentro de $[-6, 1]$. 
@@ -747,7 +733,7 @@ Como na Figura 8, agora estamos no $nó_{-2}$, este não é folha, então prosse
 Consultaremos em profundidade iniciando pela esquerda. À esquerda de $nó_{-2}$ é $nó_{-6}$, não folha, e portanto checaremos se este está ainda é menor que a consulta, ou seja, se a busca em profundidade pode prosseguir consultando os ramos à esquerda da árvore. $-6 \leq -6$, logo, faremos uma \Call{Busca1DEmAlcance}{$nó_{-4}\rightarrow \tau_{assoc}, -8, 3$}. A árvore auxiliar do $nó_{-4}$ é $\tau_{assoc}$ é a árvore que segue:
 
 
-\begin{figure}
+\begin{figure}[h]
     \centering
 \begin{tikzpicture}[scale=0.5][nodes={draw, circle}, ->]
  \node{5}
@@ -766,7 +752,7 @@ Prosseguiremos com a consulta à direita do $nó_{corte}= nó_{-2}$.
 
 A figura a seguir é a nossa implementação da Árvore de alcance 2D:
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
