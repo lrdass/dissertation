@@ -319,8 +319,6 @@ Uma árvore de alcance pode ser implementada considerando várias dimensões. No
     \label{fig:8}
 \end{figure}
 
-\textbf{ACENTUE AS PALAVRAS \underline{ÁRVORE} NA FIGURA \ref{fig:8}}
-
 \subsection{Árvore de Alcance 2D}
 
 Uma árvore de alcance 2D é uma versão de duas dimensões para a árvores de alcance. A construção considera um dado conjunto de pontos $P$ e pode ser feita da seguinte forma.
@@ -385,18 +383,11 @@ Pegamos o ponto médio da $x$-coordenada, $x_{med}$, e o guardamos em um nó $r$
 %pseudo codigo
 
 Vamos seguir alguns passos da construção de uma árvore de alcance. Considere os os pontos da Figura \ref{fig:9} ordenados pelo eixo $x$: $P_{ord(x)} = \{(-8,8), (-7, -3), (-6, 2), (-4,5),$ $(-2,-7),(0,10), (3,-9), (4,2), (7,-11), (15,3)\}$. Criamos um nó raiz $r$ e nele armazenamos o valor da $x_{med} = -2$. Dividimos o conjunto de pontos em dois subconjuntos $P_1$ com os pontos $x\leq -2$ e $P_2$ com os valores $x > -2$.
-Com relação à árvore de segundo nível relacionada ao conjunto $p$ inicial, fazemos uma $y$-ordenação nos pontos de $P$ e construímos uma árvore binária balanceada considerando os valores do eixo $y$ e associaremos a árvore resultante à raiz $r$ (ou nó$_{-2}$) da árvore do primeiro nível. 
-
-\textbf{VOU PARAR AQUI LUCAS ATÉ VOCÊ LER MAIS UMA VEZ PARA CORRIGIR O TEXTO. NÃO ALTERE NADA QUE VEM ANTES DESSE TEXTO. SOMENTE ALTERE O QUE VEM DEPOIS. RELEIA COM ATENÇÃO TODO O TEXTO PARA SE ACOSTUMAR COM A NOSSA NOTAÇÃO E A FORMA COMO ESCREVEMOS. A PARTIR DESTE PONTO, RELEIA O SEU TEXTO COM ATENÇÃO CORRIGINDO OS ERROS. MUITA ATENÇÃO COM O QUE VOCÊ ESCREVE E O QUE DE FATO É (CONFORME O EXEMPLO SEGUIDO). POR EXEMPLO, VOCÊ ESCREVEU QUE A $x_{med} = 2$ PARA O CASO ACIMA. MAS O CORRETO É $-2$... NÃO ESQUEÇA DE ACENTUAR AS PALAVRAS, POR EXEMPLO, \underline{ÁRVORE}. CONSEGUI REMOVER TODOS OS "ERROS DE COMPILAÇÃO". POR FAVOR, TENTE NÃO INSERIR NENHUM NOVO "ERRO DE COMPILAÇÃO".}
-
-Criamos dois nós: $v_{esquerda}$ e $v_{direita}$ e associamos os conjuntos $P_1$ e $P_2$ nas chamadas
-recursivas.
-
-Agora repete-se o procedimento para os subconjuntos $P_1$ e $P_2$.
-Para os pontos de $P_1$, temos o valor $x_{mediana} = -6$. Associaremos a este nó a árvore binária auxiliar
-construída com os pontos de $P_1$ ordenados pela $y$-coordenada.
+Com relação à árvore de segundo nível relacionada ao conjunto $p$ inicial, fazemos uma $y$-ordenação nos pontos de $P$ e construímos uma árvore binária balanceada considerando os valores do eixo $y$ e associaremos a árvore resultante à raiz $r$ (ou nó$_{-2}$) da árvore do primeiro nível. A subárvore à esquerda de $r$ será uma árvore de alcance sobre $P_1$; e a subárvore à direita de $r$ será uma árvore de alcance sobre $P_2$.
+A Figura \ref{fig:10} ilustra o $nó_{-6}$ e a sua árvore associada de segundo nível.
 % arvore com nó 1 e nó 2, nó_2 indicando a árvore associada construida 
 \begin{figure}[h!]
+
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
@@ -431,13 +422,11 @@ construída com os pontos de $P_1$ ordenados pela $y$-coordenada.
  
 \end{minipage}
  \caption{$nó_{-6}$ e sua $y$-árvore associada}
+ \label{fig:10}
 \end{figure}
 
+Este procedimento é repetido até que o conjunto de pontos tenha somente um ponto. Neste caso, criamos um nó folha contendo o ponto $p$. A Figura \ref{fig:11} a seguir é a representação dos pontos no plano em uma árvore de alcance atingíveis do $nó_{-6}$.
 
-Repete-se recursivamente \Call{ConstróiArvoreAlcance2D}{$P$} até o conjunto $P$ contiver somente um ponto.
-Cria-se um nó folha contendo como valor o ponto $p$ em ambas as árvores.
-
-A figura a seguir é a representação dos pontos no plano em uma árvore de alcance.
 \begin{figure}[h!]
 
 \begin{tikzpicture}[nodes={draw, circle}, ->]
@@ -477,9 +466,10 @@ A figura a seguir é a representação dos pontos no plano em uma árvore de alc
     };
  \end{tikzpicture}
  \caption{Árvore construída com os pontos $P$ pela $x$-coordenada}
+ \label{fig:11}
 \end{figure}
 
-\subsection{Consulta}
+\subsection{Consulta dos pontos em árvores de alcance}
 
 Uma consulta 2-dimensional em $P$ é uma busca de quais pontos de $P$ estão entre uma janela de consulta
 $[x, x'] \times [y, y']$. Um ponto $p = (p_x, p_y)$ está dentro de um retângulo de consulta se e somente
@@ -498,7 +488,7 @@ A consulta com janela, consistirá portanto na união de duas consultas de inter
 Seja uma árvore binária balanceada $\Gamma$. Uma consulta de intervalo em $\Gamma$ é tal que queremos
 todos os nós folhas de $\Gamma$ cujo valor esteja dentro do intervalo consultado $[x, x']$.
 
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
         \includegraphics[scale=0.4]{images/range_tree2.pdf}
     \end{center}
@@ -538,7 +528,7 @@ se está dentro do intervalo, caso esteja reporta-o.
 
 Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta unidimensional.
 
-\begin{algorithm}[h]
+\begin{algorithm}[h!]
     \caption{Recebe como parâmetro um nó e uma janela. Devolve o primeiro ponto dentro janela de consulta.}
     \begin{algorithmic}[1]
     \Function{EncontraNóCorte}{$v$, $R:[x, x']$}
@@ -558,7 +548,7 @@ Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta uni
 \end{algorithm}
 
 
-\begin{algorithm}[h]
+\begin{algorithm}[h!]
     \caption{Recebe um nó e uma consulta. Devolve todos os pontos dentro da consulta.}
     \begin{algorithmic}[1]
     \Function{Busca1DEmAlcance}{$v_{corte}$, $R:[x, x']$}
@@ -587,11 +577,11 @@ Em seguida temos o pseudocódigo para buscar o $nó_{corte}$ e para consulta uni
 \clearpage
 
 
-Na figura 7 temos a árvore construída em relação a coordenada $y$.
+Na \ref{fig:11} temos a árvore construída em relação a coordenada $y$.
 Iremos fazer uma consulta unidimensional de intervalo nesta árvore inicialmente.
 Seja o intervalo de consulta $R = [-8, 3]$ segue na figura em seguida:
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
     \caption {Em azul, a consulta unidimensional em $y$ nos pontos em $P$}
 \begin{tikzpicture}[scale=0.33]
