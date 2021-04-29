@@ -49,7 +49,8 @@
     \vspace*{\fill}
    \end{center}
         
-   Trabalho aprovado. \imprimirlocal, 3 de dezembro de 2020:
+   %Trabalho aprovado. \imprimirlocal, 22 de abril de 2021:
+   Trabalho submetido à banca. Florianópolis, 16 de abril de 2021:
 
    \assinatura{\textbf{\imprimirorientador} \\ Orientador} 
 
@@ -79,9 +80,7 @@
 \end{dedicatoria}
 % ---
 
-% ---
-% Agradecimentos
-% ---
+
 \begin{agradecimentos}
 % Os agradecimentos principais são direcionados à Gerald Weber, Miguel Frasson,
 % Leslie H. Watter, Bruno Parente Lima, Flávio de Vasconcellos Corrêa, Otavio Real
@@ -99,16 +98,32 @@
 % \emph{\abnTeX}\footnote{\url{http://groups.google.com/group/abntex2} e
 % \url{http://abntex2.googlecode.com/}}~que contribuíram e que ainda
 % contribuirão para a evolução do \abnTeX.
-Agradecimentos
+À minha mãe Cleonice que em nenhum momento teve duvidas de minha capacidade e sempre incentivou que eu trilhasse meu rumo qualquer que fosse a direção. Sempre confiou na minha bússola e compasso moral que me guiaram até onde me encontro.
+
+À meu pai Bernardino que sem seu sopro e força jamais teria ido longe. \textit{`` Vós sois os arcos dos quais vossos filhos são arremessados como flechas vivas.'' - Khalil Gibran}
+
+Ao meu orientador Álvaro por esse ano de trabalho incessante e seu grande carinho e suporte para que eu conseguisse executar esta obra.
+
+À cada amigo e colega que conheci durante essa jornada. Dos que ficaram e dos que se foram. Cada letra deste trabalho tem um pouco de cada um.
+
+À cada professor e profissional desta universidade que me passou um pouco de seu conhecimento, e em especial, à aqueles poucos professores que conseguiram  de forma especial cativar minha curiosidade para esta sublime ciência.
+
+À flor que sem ela este trabalho jamais teria vindo a fruição. Por sempre ter acreditado em mim mesmo quando nem eu mesmo acreditava; por cada sorriso mesmo quando eu era só lagrimas; por ter sido meu alicerce quando eu era fraco.
+
+À Ele que dá-me forças, guia-me, protege-me e orienta-me sempre.
 
 \end{agradecimentos}
-% ---
+
 
 % ---
 % Epígrafe
 % ---
 \begin{epigrafe}
     \vspace*{\fill}
+    \begin{flushright}
+		\textit{``Um processo computacional é de fato muito parecido como a ideia de um espirito para os magos. Não pode ser visto ou tocado. Não é composto de matéria. Entretanto, é real. Pode realizar trabalho intelectual. Pode responder questões. Pode afetar o mundo entregando dinheiro em um caixa de banco ou controlando um braço robótico em uma fábrica. Nós conjuramos programas como os magos conjuram suas magias. Eles são cuidadosamente compostos de expressões simbólicas em linguagens de programação arcanas e esotéricas que descrevem o intento para os processos executarem .'' \\
+		(Structure and Interpretation of Computer Programs, pagina 2)}
+	\end{flushright}
 	\begin{flushright}
 		\textit{``Ainda que eu andasse pelo vale da sombra da morte, \\
 		não temeria mal algum, porque tu estás comigo;\\
@@ -127,22 +142,20 @@ Agradecimentos
 \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
 \begin{resumo}
 	\SingleSpacing
-	Um estudo das estruturas e técnicas comuns para otimização para renderização em janelas.
-	Tendo em mente o constante crescimento de polígonos dos objetos a serem renderizados, há uma necessidade de que os
-	objetos sejam acessados e "encontrados" de forma rápida e eficiente.
+	Este trabalho apresenta um estudo de algumas estruturas de dados e técnicas para processamento de janelas. Estudamos maneiras de estruturar objetos geométricos de tal forma que consultas em janelas são respondidas eficientemente. As estruturas de dados que estudamos foram Árvore $KD$, Árvore de Alcance, Árvore de Intervalos e Árvore de Segmentos. Este trabalho utilizou todas as estruturas de dados no plano. As estruturas de dados e algoritmos de construção e consulta foram implementados. Por fim, utilizamos nossas implementações em uma aplicação que processa pontos e segmentos no plano. 
+	%Tendo em mente o constante crescimento de polígonos dos objetos a serem processados, há uma necessidade de que os objetos sejam acessados de forma rápida e eficiente.
 
-	\textbf{Palavras-chave}: Estruturas de Dados. Arvores. Geometria Computacional.
+	\textbf{Palavras-chave}: Estruturas de Dados. Árvores. Geometria Computacional.
 \end{resumo}
 
 % resumo em inglês
 \begin{resumo}[Abstract]
 	\SingleSpacing
 	\begin{otherlanguage*}{english}
-		A study of the most common tecniques for optimizing rendering on windows.
-		Beign awere of the constant growth of the polygon count and the size of graphical applications, and the necessity for easy
-		and quick access to the objects.
+		This work presents a study of some data structures and techniques to process windows. We study ways to structure geometric objects in such a way that queries in windows are quickly answered. The data structures that we study were $KD$ Tree, Range Tree, Interval Tree and Segment Tree. This work used all the data structures on the plan. The data structures and the algorithms of construction and query were implemented. Finally, we used our implementation in an application that processes points and segments on the plan.  %A study of the most common tecniques for optimizing rendering on windows.
+		%Beign awere of the constant growth of the polygon count and the size of graphical applications, and the necessity for easy and quick access to the objects.
 
-		\textbf{Keywords}: Data Structure. Tree. Computational Geometry.
+		\textbf{Keywords}: Data Structures. Trees. Computational Geometry.
 	\end{otherlanguage*}
 \end{resumo}
 
@@ -167,21 +180,21 @@ Agradecimentos
 % ---
 % inserir lista de abreviaturas e siglas
 % ---
-\begin{siglas}
-  \item[ABNT] Associação Brasileira de Normas Técnicas
-  \item[abnTeX] ABsurdas Normas para TeX
-\end{siglas}
+%\begin{siglas}
+%  \item[ABNT] Associação Brasileira de Normas Técnicas
+%  \item[abnTeX] ABsurdas Normas para TeX
+%\end{siglas}
 % ---
 
 % ---
 % inserir lista de símbolos
 % ---
-\begin{simbolos}
-  \item[$ \Gamma $] Letra grega Gama
-  \item[$ \Lambda $] Lambda
-  \item[$ \zeta $] Letra grega minúscula zeta
-  \item[$ \in $] Pertence
-\end{simbolos}
+%\begin{simbolos}
+%  \item[$ \Gamma $] Letra grega Gama
+%  \item[$ \Lambda $] Lambda
+%  \item[$ \zeta $] Letra grega minúscula zeta
+%  \item[$ \in $] Pertence
+%\end{simbolos}
 % ---
 
 % ---

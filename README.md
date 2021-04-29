@@ -1,2 +1,2 @@
-# monografia para conclusão de curso - ufsc cco
+# dissertation
 tcc
